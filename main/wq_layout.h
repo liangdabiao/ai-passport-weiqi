@@ -46,3 +46,11 @@
 #define WQ_CHARS_HEADLINE 6   // 32px
 #define WQ_CHARS_BODY     8   // 24px
 #define WQ_CHARS_SMALL    13  // 16px
+
+// ----------------------------------------------- 一行的行高 ---------------
+// Noto Sans CJK 在 16/24px 字号下的实际行高。所有「只允许一行」的标签
+// （行、顶栏、提示栏）必须把高度钉成这个值：LVGL 的省略号截断（DOTS）只对
+// **固定尺寸**的标签生效 —— 高度给了「按内容自适应」，超宽的文字就会折成
+// 第二行再被行高裁掉（真机第一轮反馈里「两行、看不见」的根因）。
+#define WQ_LINE_H_SMALL   20  // 16px 字库的行高
+#define WQ_LINE_H_BODY    29  // 24px 字库的行高

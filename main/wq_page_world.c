@@ -78,8 +78,10 @@ lv_obj_t *wq_page_world_enter(void)
 
     for (int index = 0; index < WORLD_ROWS; index++) {
         const int y = WORLD_ROW_GAP + index * (WORLD_ROW_H + WORLD_ROW_GAP);
-        s_rows[index] = wq_row_create(body, WQ_BODY_X, y, WQ_BODY_W, WORLD_ROW_H,
-                                      0, 56);
+        // 16px 小行 + 不留进度槽位：八个字的章节名只有「一行 + 巨量余量」一条路，
+        // 不会再被任何右侧内容挤成省略号或第二行（真机第二轮反馈）。
+        s_rows[index] = wq_row_small_create(body, WQ_BODY_X, y, WQ_BODY_W, WORLD_ROW_H,
+                                            0, 0);
     }
 
     world_refresh();

@@ -189,10 +189,12 @@ wq_topbar_t wq_topbar_create(lv_obj_t *card, const char *left, const lv_font_t *
     bar.bar = filled(card, 0, 0, WQ_PAGE_W, WQ_BAR_H, WQ_C_PANEL_ALT);
 
     if (left && left[0]) {
+        const bool big = !left_font || left_font == &wq_font_24;
         bar.left = wq_label_create(bar.bar, left, left_font ? left_font : &wq_font_24,
                                    WQ_C_INK);
         lv_obj_set_width(bar.left, WQ_BAR_LEFT_W);
-        lv_obj_set_height(bar.left, LV_SIZE_CONTENT);
+        // 一行钉死（见 row_build 的注释），36px 顶栏里两档字号都放得下。
+        lv_obj_set_height(bar.left, big ? WQ_LINE_H_BODY : WQ_LINE_H_SMALL);
         lv_label_set_long_mode(bar.left, LV_LABEL_LONG_MODE_DOTS);
         lv_obj_align(bar.left, LV_ALIGN_LEFT_MID, WQ_BAR_PAD, 0);
     }
@@ -214,7 +216,7 @@ void wq_topbar_set_right(wq_topbar_t *bar, const char *text)
     }
     bar->right = wq_label_create(bar->bar, text ? text : "", &wq_font_16, WQ_C_HINTINK);
     lv_obj_set_width(bar->right, WQ_BAR_RIGHT_W);
-    lv_obj_set_height(bar->right, LV_SIZE_CONTENT);
+    lv_obj_set_height(bar->right, WQ_LINE_H_SMALL);
     lv_label_set_long_mode(bar->right, LV_LABEL_LONG_MODE_DOTS);
     lv_obj_set_style_text_align(bar->right, LV_TEXT_ALIGN_RIGHT, 0);
     lv_obj_align(bar->right, LV_ALIGN_RIGHT_MID, -WQ_BAR_PAD, 0);
@@ -234,7 +236,7 @@ lv_obj_t *wq_hint_create(lv_obj_t *card, const char *text)
     // 底栏只有 26px 高，一行 16px 字占 20px。宽度封死并禁用换行 ——
     // 文案变长时宁可在右边打省略号，也不能折成两行顶出底栏。
     lv_obj_set_width(label, WQ_PAGE_W - 12);
-    lv_obj_set_height(label, LV_SIZE_CONTENT);
+    lv_obj_set_height(label, WQ_LINE_H_SMALL);
     lv_label_set_long_mode(label, LV_LABEL_LONG_MODE_DOTS);
     lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_CENTER, 0);
     lv_obj_center(label);
@@ -276,7 +278,7 @@ lv_obj_t *wq_note_create(lv_obj_t *parent, int x, int y, int w,
     lv_obj_t *label = wq_label_create(parent, text, &wq_font_16, color);
     lv_obj_set_pos(label, x, y);
     lv_obj_set_width(label, w);
-    lv_obj_set_height(label, LV_SIZE_CONTENT);
+    lv_obj_set_height(label, WQ_LINE_H_SMALL);
     lv_label_set_long_mode(label, LV_LABEL_LONG_MODE_DOTS);
     return label;
 }
@@ -344,27 +346,31 @@ static wq_row_t row_build(lv_obj_t *parent, int x, int y, int w, int h,
     const int note_w = note_width > 0 ? note_width : 0;
     const int inner = w - 2 * WQ_ROW_BORDER - 2 * WQ_ROW_PAD - tag_w - note_w;
 
+    // 行内标签的高度一律钉成**一行**的行高：省略号截断（DOTS）只对固定尺寸
+    // 生效，给了「按内容自适应」超宽就折第二行、再被行高裁掉 —— 真机第一轮
+    // 反馈「两行、看不见」的根因。钉死之后任何超宽都变成一行省略号。
+    const int line_h = small ? WQ_LINE_H_SMALL : WQ_LINE_H_BODY;
+
     if (tag_w > 0) {
         // 标记与正文同字号，基线一致；不单独做一个小字号的方框，
         // 免得在 36px 的行高里塞两级字号反而更乱。
         row.tag = wq_label_create(row.box, "", text_font, WQ_C_INK);
         lv_obj_set_width(row.tag, tag_w);
-        lv_obj_set_height(row.tag, LV_SIZE_CONTENT);
+        lv_obj_set_height(row.tag, line_h);
+        lv_label_set_long_mode(row.tag, LV_LABEL_LONG_MODE_DOTS);
         lv_obj_align(row.tag, LV_ALIGN_LEFT_MID, WQ_ROW_PAD, 0);
     }
 
-    // 文字宽度写死，不让它按内容自己长；真放不下时 LVGL 打省略号，
-    // 不会溢出到边框外面。
     row.text = wq_label_create(row.box, "", text_font, WQ_C_INK);
     lv_obj_set_width(row.text, inner);
-    lv_obj_set_height(row.text, LV_SIZE_CONTENT);
+    lv_obj_set_height(row.text, line_h);
     lv_label_set_long_mode(row.text, LV_LABEL_LONG_MODE_DOTS);
     lv_obj_align(row.text, LV_ALIGN_LEFT_MID, WQ_ROW_PAD + tag_w, 0);
 
     if (note_w > 0) {
         row.note = wq_label_create(row.box, "", &wq_font_16, WQ_C_MUTED);
         lv_obj_set_width(row.note, note_w);
-        lv_obj_set_height(row.note, LV_SIZE_CONTENT);
+        lv_obj_set_height(row.note, WQ_LINE_H_SMALL);
         lv_label_set_long_mode(row.note, LV_LABEL_LONG_MODE_DOTS);
         lv_obj_set_style_text_align(row.note, LV_TEXT_ALIGN_RIGHT, 0);
         lv_obj_align(row.note, LV_ALIGN_RIGHT_MID, -WQ_ROW_PAD, 0);
