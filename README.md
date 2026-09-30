@@ -21,10 +21,10 @@ the on-device version keeps its chapter ladder and star ratings.
 | Page | What is on screen | The three keys |
 | --- | --- | --- |
 | **Title** | A large title, three entries — Continue, Volume, Reset record — and a line such as "cleared 12/154 · ★30" | UP/DOWN to choose, OK to enter. On Volume, OK cycles six steps (off, then 20% up to 100%). Reset record takes **two presses of OK** |
-| **World map** | Seven chapters, locked ones greyed out; the selected chapter shows its progress in the hint bar | UP/DOWN to choose, OK to enter a chapter, long-press OK to return |
-| **Level list** | Five rows per screen: number, level title, stars earned; locked levels are greyed out with a lock mark | UP/DOWN to move, OK to enter an unlocked level, long-press OK to return to the map |
+| **World map** | Seven chapters, all open; the selected chapter shows its progress in the hint bar | UP/DOWN to choose, OK to enter a chapter, long-press OK to return |
+| **Level list** | Five rows per screen: number, short title (the web game's " · x/N" suffix is stripped), stars earned | UP/DOWN to move, OK to enter any level, long-press OK to return to the map |
 | **Brief** | The level's instruction (scrollable), or the board plus question for quiz levels | UP/DOWN to scroll, OK to start, long-press OK to return |
-| **Playing** | A 9x9 board, a gold cursor, a status line | Short UP/DOWN move a row, long UP/DOWN move a column, OK places (or confirms / removes dead stones), long-OK goes back to the brief |
+| **Playing** | A 9x9 board, a gold cursor, a status line | Short UP/DOWN move a row, double-click UP/DOWN moves a column, OK places (or confirms / removes dead stones), long-OK goes back to the brief |
 | **Result** | Three stars at best, points (100 per star), mistakes | OK for the next level, long-OK back to the list |
 
 Judging matches the web game: a move must extend one of the level's scripted solution paths; a

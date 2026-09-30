@@ -1,8 +1,8 @@
 // main/wq_page_world.c —— 世界地图页：七个章节，按段位从青铜到王者。
 //
-// 章节名用 24px（最长 8 个全角字符，188px 的行内放得下）；该章的进度放底栏
-// 提示行 —— 行内右侧还要留给「锁定」提示，塞不下第二组数字。
-// 章节「可进入」的判定：它的第一关已解锁（即上一章最后一关已通关）。
+// 章节名用 24px、行内不放进度数字 —— 「青铜 · 入门启蒙」八个全角字符本来就会
+// 被右侧的 x/y 挤成省略号（真机反馈：文字被挤出去了），进度挪到底栏提示行，
+// 行内只留标题，一行稳放。真机反馈：全部解锁，不做锁定。
 #include "wq_app.h"
 
 #include <stdio.h>
@@ -28,17 +28,16 @@ static lv_obj_t *s_hint;
 static char s_hint_text[48];
 static int s_sel;
 
-static bool chapter_enterable(int index)
-{
-    const wq_chapter_t *chapter = &wq_chapters[index];
-    return wq_progress_unlocked(wq_app_progress(), chapter->first);
-}
-
 static void world_refresh(void)
 {
     for (int index = 0; index < WORLD_ROWS; index++) {
-        char note[16];
-        const wq_chapter_t *chapter = &wq_chapters[index];
+        wq_row_update(&s_rows[index], NULL, wq_chapters[index].title, "",
+                      index == s_sel ? WQ_STATE_SELECTED : WQ_STATE_NORMAL);
+    }
+
+    if (s_hint) {
+        // 进度放提示行：行内放了它，八个字的章节名就要被挤成省略号。
+        const wq_chapter_t *chapter = &wq_chapters[s_sel];
         uint16_t cleared = 0;
         for (uint16_t i = 0; i < chapter->count; i++) {
             if (wq_progress_stars(wq_app_progress(),
@@ -46,39 +45,14 @@ static void world_refresh(void)
                 cleared++;
             }
         }
-        snprintf(note, sizeof(note), "%u/%u", (unsigned)cleared,
-                 (unsigned)chapter->count);
-        const bool enterable = chapter_enterable(index);
-        wq_state_t state;
-        if (index == s_sel) {
-            state = WQ_STATE_SELECTED;
-        } else if (!enterable) {
-            state = WQ_STATE_DISABLED;
-        } else {
-            state = WQ_STATE_NORMAL;
-        }
-        wq_row_update(&s_rows[index], NULL, chapter->title,
-                      enterable ? note : "锁定", state);
-    }
-
-    if (s_hint) {
-        const wq_chapter_t *chapter = &wq_chapters[s_sel];
-        if (chapter_enterable(s_sel)) {
-            snprintf(s_hint_text, sizeof(s_hint_text), "%u 关 · 确定进入 · 长按返回",
-                     (unsigned)chapter->count);
-        } else {
-            snprintf(s_hint_text, sizeof(s_hint_text), "通关上一章后解锁");
-        }
+        snprintf(s_hint_text, sizeof(s_hint_text), "已通关 %u/%u · 确定进入",
+                 (unsigned)cleared, (unsigned)chapter->count);
         lv_label_set_text(s_hint, s_hint_text);
     }
 }
 
 static void world_activate(void)
 {
-    if (!chapter_enterable(s_sel)) {
-        wq_sfx_play(WQ_TONE_WRONG);
-        return;
-    }
     wq_sfx_play(WQ_TONE_ENTER);
     wq_app_goto_levels();
 }
@@ -98,7 +72,7 @@ lv_obj_t *wq_page_world_enter(void)
     if (!card) return screen;
 
     wq_topbar_t bar = wq_topbar_create(card, "世界地图", &wq_font_16);
-    wq_topbar_set_right(&bar, "关卡进度");
+    wq_topbar_set_right(&bar, "章节");
     s_hint = wq_hint_create(card, "");
     lv_obj_t *body = wq_body_create(card);
 

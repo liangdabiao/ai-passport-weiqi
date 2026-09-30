@@ -697,7 +697,7 @@ static const wq_path_t level_153_correct[] = { { 3, level_153_path_0 } };
 
 const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
     {
-        .title = "围棋游戏 · 3/6",
+        .title = "围棋游戏",
         .instruction = "棋子相邻的空点叫做『气』。请填上黑子的一个气。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -716,7 +716,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "围棋游戏 · 4/6",
+        .title = "围棋游戏",
         .instruction = "当一个棋子所有的气都被对方棋子占满，它就被吃掉了。请填上黑子的最后一口气把它吃掉。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -735,7 +735,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "围棋游戏 · 6/6",
+        .title = "围棋游戏",
         .instruction = "这条黑链只剩一气了，这叫做『打吃』（atari）。请吃掉这条被打吃的黑链。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -754,7 +754,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "自杀 · 1/3",
+        .title = "自杀",
         .instruction = "白先。下在 A 或 B 是『自杀』（白没有气），不允许。但下在 C 是允许的，因为能吃掉标▲的黑子从而给自己造出气。请吃掉标▲的黑子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -773,7 +773,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "自杀 · 2/3",
+        .title = "自杀",
         .instruction = "白先。双方都被打吃。没有气的着法不允许，除非能吃掉对方。请吃掉一颗或更多黑子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -792,7 +792,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "自杀 · 3/3",
+        .title = "自杀",
         .instruction = "白先。双方都被打吃。没有气的着法不允许，除非能吃掉对方。请吃掉一颗或更多黑子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -811,7 +811,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "眼 · 1/4",
+        .title = "眼",
         .instruction = "A 点被白子包围，这叫『眼』。黑不能下在 A（自吃）。B 点也是眼，但黑可以下在 B 并吃掉白子。请吃掉这些白子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -830,7 +830,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "眼 · 2/4",
+        .title = "眼",
         .instruction = "白棋有一个由两个空点组成的大眼，但白棋并不安全。黑先，逐一填眼吃掉白棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -849,7 +849,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "眼 · 3/4",
+        .title = "眼",
         .instruction = "白棋有两块棋。一块有两只眼，另一块只有一个大眼。两眼的那块是活的，永远吃不掉。黑先，吃掉那块可以吃的白棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -868,7 +868,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "眼 · 4/4",
+        .title = "眼",
         .instruction = "一块白棋有两只『真眼』。另一块在 A 处有真眼、在 B 处是『假眼』。假眼不安全，可以被攻破。黑先，从假眼入手吃掉这块白棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -887,7 +887,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "劫 · 1/5",
+        .title = "劫",
         .instruction = "为了避免无限互相提子，有一条特殊规则叫『劫规』：禁止立即提回同样的形状。黑可以吃掉标▲的白子，但白不能立刻提回。白必须先在别处下一手。请吃掉标▲的白子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -906,7 +906,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "劫 · 2/5",
+        .title = "劫",
         .instruction = "利用劫规吃掉这块白棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -925,7 +925,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "劫 · 3/5",
+        .title = "劫",
         .instruction = "请把你的黑子连接起来。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -944,7 +944,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "劫 · 4/5",
+        .title = "劫",
         .instruction = "利用劫规吃掉这两颗白子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -963,7 +963,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "劫 · 5/5",
+        .title = "劫",
         .instruction = "白刚走了 1 吃掉一颗黑子。要绕过劫规，请为黑棋找一个白必须应的地方下子，这叫做『劫材』。然后黑就能吃掉标▲的白棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -982,7 +982,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "领地 · 1/12",
+        .title = "领地",
         .instruction = "如果你用棋子包围了棋盘的一部分，这部分就称为你的'领地'。领地中的每个空交叉点都为你计一分。分数可以通过领地和提子来获得。游戏结束时，得分最多者获胜。角部的领地有多少分？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1001,7 +1001,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "领地 · 2/12",
+        .title = "领地",
         .instruction = "角部的领地有多少分？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1020,7 +1020,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "领地 · 3/12",
+        .title = "领地",
         .instruction = "角部的领地有多少分？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1039,7 +1039,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "领地 · 4/12",
+        .title = "领地",
         .instruction = "角部的领地有多少分？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1058,7 +1058,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "领地 · 5/12",
+        .title = "领地",
         .instruction = "角部的领地有多少分？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1077,7 +1077,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "领地 · 6/12",
+        .title = "领地",
         .instruction = "角部的领地有多少分？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1096,7 +1096,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "领地 · 7/12",
+        .title = "领地",
         .instruction = "角部的领地有多少分？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1115,7 +1115,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "领地 · 8/12",
+        .title = "领地",
         .instruction = "角部的领地有多少分？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1134,7 +1134,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "领地 · 9/12",
+        .title = "领地",
         .instruction = "角部的领地有多少分？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1153,7 +1153,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "领地 · 10/12",
+        .title = "领地",
         .instruction = "角部的领地有多少分？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1172,7 +1172,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "领地 · 11/12",
+        .title = "领地",
         .instruction = "对手在你的领地里的棋子如果缺少两个眼，就会被吃掉。这些被吃的棋子称为'死子'。在游戏结束时，死子作为俘虏被从棋盘上提走，留下一个空的领地交叉点。因此，一个死子相当于两分：一分是俘虏，一分是领地。角部的领地有多少分？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1191,7 +1191,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "领地 · 12/12",
+        .title = "领地",
         .instruction = "角部的领地有多少分？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1210,7 +1210,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "对局结束 · 1/3",
+        .title = "对局结束",
         .instruction = "轮到你落子时，你并非必须在棋盘上放置棋子。你可以选择停一手。当双方都认为没有更好的着法时，通过双方连续停一手来结束这局棋。本局已经结束。请点击“停一手”来结束对局。",
         .kind = WQ_KIND_END_PASS,
         .player = 1,
@@ -1229,7 +1229,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "对局结束 · 2/3",
+        .title = "对局结束",
         .instruction = "双方都停一手后，会进入“提子阶段”，此时你可以从棋局中移除明显已死的棋子。请点击并移除那些死掉的黑棋棋子。",
         .kind = WQ_KIND_END_REMOVE,
         .player = 1,
@@ -1248,7 +1248,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 4,
     },
     {
-        .title = "对局结束 · 3/3",
+        .title = "对局结束",
         .instruction = "移除死子后，计算黑白双方领地的大小。黑棋领地有24目。白棋领地有18目，加上被吃的4颗死子，共计22目。因此，黑棋赢得了本局。请点击“完成”来结束对局。",
         .kind = WQ_KIND_END_FINISH,
         .player = 1,
@@ -1267,7 +1267,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "气 · 1/12",
+        .title = "气",
         .instruction = "计算黑棋棋串的气数。",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1286,7 +1286,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "气 · 8/12",
+        .title = "气",
         .instruction = "计算黑棋棋串的气数。",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1305,7 +1305,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "棋串 · 4/6",
+        .title = "棋串",
         .instruction = "计算白棋棋串的数量。",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1324,7 +1324,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "打吃 · 6/6",
+        .title = "打吃",
         .instruction = "标记的棋串是否处于打吃状态？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1343,7 +1343,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "计算打吃 · 7/12",
+        .title = "计算打吃",
         .instruction = "有多少个白棋棋串处于打吃状态？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1362,7 +1362,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "提子 · 3/6",
+        .title = "提子",
         .instruction = "黑先。吃掉被标记的白棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -1381,7 +1381,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "吃掉棋串 · 5/16",
+        .title = "吃掉棋串",
         .instruction = "黑先。吃掉一个或多个白棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -1400,7 +1400,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "吃掉棋串 · 12/16",
+        .title = "吃掉棋串",
         .instruction = "白先。吃掉一个或多个黑棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -1419,7 +1419,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "双方打吃 · 4/12",
+        .title = "双方打吃",
         .instruction = "白先。吃掉一个或多个黑棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -1438,7 +1438,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "双方打吃 · 12/12",
+        .title = "双方打吃",
         .instruction = "白先。吃掉一个或多个黑棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -1457,7 +1457,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "寻找逃跑 · 2/12",
+        .title = "寻找逃跑",
         .instruction = "黑先。解救处于打吃的棋串。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -1476,7 +1476,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "寻找逃跑 · 9/12",
+        .title = "寻找逃跑",
         .instruction = "黑先。解救处于打吃的棋串。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -1495,7 +1495,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "创造开口 · 5/12",
+        .title = "创造开口",
         .instruction = "白先。通过制造一个突破口来解救被打吃的棋串。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -1514,7 +1514,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "连接 · 1/6",
+        .title = "连接",
         .instruction = "棋子可以通过形成棋串来互相帮助。棋串比单颗棋子更难被吃。你可以通过连接你的棋子来形成棋串。连接白棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -1533,7 +1533,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "切断 · 2/6",
+        .title = "切断",
         .instruction = "黑先。切断白棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -1552,7 +1552,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "自杀 · 4/12",
+        .title = "自杀",
         .instruction = "白先。白棋能在A点落子吗？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1571,7 +1571,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "自杀 · 12/12",
+        .title = "自杀",
         .instruction = "白先。白棋能在A点落子吗？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1590,7 +1590,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "劫 · 1/6",
+        .title = "劫",
         .instruction = "黑棋用1号棋子吃掉了标记为三角形的白棋。如果白棋提回后，棋盘局面与黑棋下1号棋子前完全相同，则此提回不被允许。白棋是否能立即提回1号棋子？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1609,7 +1609,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "活棋 · 3/6",
+        .title = "活棋",
         .instruction = "黑棋棋块是活棋吗？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1628,7 +1628,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "两眼 · 5/6",
+        .title = "两眼",
         .instruction = "白先。做出两只眼。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -1647,7 +1647,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "打吃至边 · 1/18",
+        .title = "打吃至边",
         .instruction = "黑先。将带标记的白棋驱向棋盘边缘，可以更容易地吃掉它。选择落子点A或B，将带标记的白棋推向边缘。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -1666,7 +1666,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "打吃棋子 · 1/6",
+        .title = "打吃棋子",
         .instruction = "黑先。将带标记的白棋驱向己方棋子，有助于吃掉这些棋子。对带标记的白棋进行打吃。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -1685,7 +1685,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "打吃并切断 · 13/18",
+        .title = "打吃并切断",
         .instruction = "黑先。阻止白棋连接，并吃掉一颗或多颗白棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -1704,7 +1704,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "可逃跑 · 8/18",
+        .title = "可逃跑",
         .instruction = "白先。白棋能否救出被标记的棋串？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1723,7 +1723,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "制造劫 · 8/12",
+        .title = "制造劫",
         .instruction = "白先。黑棋已下1。制造劫争。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -1742,7 +1742,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "下双打吃 · 15/18",
+        .title = "下双打吃",
         .instruction = "黑先。对带标记的白棋进行双打吃。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -1761,7 +1761,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "连接形状 · 6/15",
+        .title = "连接形状",
         .instruction = "白先。确保黑棋无法再切断白棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -1780,7 +1780,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "虎口连接 · 3/6",
+        .title = "虎口连接",
         .instruction = "白先。用虎口连接白棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -1799,7 +1799,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "征子 · 16/24",
+        .title = "征子",
         .instruction = "白先。用征子吃掉带标记的黑棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -1818,7 +1818,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "气不够 · 10/12",
+        .title = "气不够",
         .instruction = "黑先。利用白棋气不够吃掉带标记的白棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -1837,7 +1837,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "假眼 · 17/18",
+        .title = "假眼",
         .instruction = "白先。阻止黑棋将白棋的眼做成假眼。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -1856,7 +1856,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "大眼 · 17/29",
+        .title = "大眼",
         .instruction = "白先。做成两个眼，使白棋块活棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -1875,7 +1875,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "棋块活棋 · 7/12",
+        .title = "棋块活棋",
         .instruction = "黑棋的这个棋块活了吗？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1894,7 +1894,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "倒扑 · 13/25",
+        .title = "倒扑",
         .instruction = "黑先。吃掉被标记的棋子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -1913,7 +1913,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "罩 · 6/13",
+        .title = "罩",
         .instruction = "白先。用罩的方式吃掉被标记的棋子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -1932,7 +1932,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "领地 · 12/12",
+        .title = "领地",
         .instruction = "白棋的地盘有多少目？注意：一个死子算两目。",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -1951,7 +1951,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "封锁领地 · 6/12",
+        .title = "封锁领地",
         .instruction = "黑先。通过一手棋封闭黑棋领地。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -1970,7 +1970,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "对杀 · 1/18",
+        .title = "对杀",
         .instruction = "被标记的两个棋串都有两口气。白棋可以通过减少黑棋串的气来吃掉它。如果轮到黑棋走，黑棋也可以做同样的事情。这被称为'对杀'。如果双方气数相同，先落子的一方将赢得对杀。白先。赢得对杀。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -1989,7 +1989,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "正确方向 · 2/24",
+        .title = "正确方向",
         .instruction = "黑先。通过正确方向的打吃来吃掉白棋串。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -2008,7 +2008,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "正确方向 · 20/24",
+        .title = "正确方向",
         .instruction = "白先。通过正确方向的打吃来吃掉黑棋串。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2027,7 +2027,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "提子 · 15/21",
+        .title = "提子",
         .instruction = "黑先。在不使自己处于打吃状态的情况下吃掉白棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -2046,7 +2046,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "逃跑 · 12/12",
+        .title = "逃跑",
         .instruction = "白先。选择落子于A或B点，使被标记的棋子逃脱？",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2065,7 +2065,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "气数 · 19/22",
+        .title = "气数",
         .instruction = "白先。黑棋用第1手填塞了自己的气。惩罚这一着。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2084,7 +2084,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "一路 · 6/12",
+        .title = "一路",
         .instruction = "黑先。提掉第一线被标记的棋子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -2103,7 +2103,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "打吃 · 1/24",
+        .title = "打吃",
         .instruction = "你可以吃掉被标记的黑棋棋子，但你需要正确开始，在正确的一侧打吃。在落子前，试着计算后续着法。白先。吃掉被标记的黑棋棋子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2122,7 +2122,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "逃脱罗网 · 1/24",
+        .title = "逃脱罗网",
         .instruction = "白先。黑棋意图用1号着法通过罩吃掉被标记的棋子。白棋可以尝试在A或B点落子逃跑。在这种情况下，其中一点是成功的。从这个罩中逃脱。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2141,7 +2141,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "计算逃脱 · 1/24",
+        .title = "计算逃脱",
         .instruction = "白先。标记的棋子能逃跑吗？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -2160,7 +2160,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "征子 · 2/8",
+        .title = "征子",
         .instruction = "有时你可以通过从正确的一侧开始来避免征子不利。黑棋可以选择在A或B点落子。通过选择正确的一侧，用征子吃掉被标记的棋子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -2179,7 +2179,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "双打吃 · 6/12",
+        .title = "双打吃",
         .instruction = "白先。下出一步好的双打吃。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2198,7 +2198,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "罩 · 7/24",
+        .title = "罩",
         .instruction = "黑先。用罩吃掉被标记的棋子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -2217,7 +2217,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "追击 · 8/13",
+        .title = "追击",
         .instruction = "黑先。通过追击吃掉棋子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -2236,7 +2236,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "提子1 · 19/24",
+        .title = "提子1",
         .instruction = "黑先。吃掉被标记的棋子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -2255,7 +2255,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "提子2 · 20/24",
+        .title = "提子2",
         .instruction = "白先。吃掉一或多颗黑棋棋子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2274,7 +2274,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "提子3 · 20/24",
+        .title = "提子3",
         .instruction = "白先。吃掉一或多颗黑棋棋子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2293,7 +2293,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "提子4 · 21/24",
+        .title = "提子4",
         .instruction = "黑先。吃掉一或多颗白棋棋子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -2312,7 +2312,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "连接 · 21/24",
+        .title = "连接",
         .instruction = "黑先。连接被标记的棋子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -2331,7 +2331,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "切断 · 22/24",
+        .title = "切断",
         .instruction = "白先。切断被标记的棋子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2350,7 +2350,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "眼 · 13/14",
+        .title = "眼",
         .instruction = "A是真眼还是假眼？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -2369,7 +2369,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "数眼 · 11/12",
+        .title = "数眼",
         .instruction = "白棋棋块有几个真眼？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -2388,7 +2388,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "对杀 · 5/24",
+        .title = "对杀",
         .instruction = "白先。请赢得标记棋块之间的对杀。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2407,7 +2407,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "对杀 · 7/13",
+        .title = "对杀",
         .instruction = "白先。请攻击正确的棋串并赢得对杀。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2426,7 +2426,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "制造双活 · 5/13",
+        .title = "制造双活",
         .instruction = "黑先。请下成双活并救出标记的棋子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -2445,7 +2445,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "生死 · 8/12",
+        .title = "生死",
         .instruction = "白先。请阻止黑棋做出第二个眼，并吃掉黑棋块。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2464,7 +2464,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "生死 · 10/13",
+        .title = "生死",
         .instruction = "白先。请先做成一只眼，使白棋块活棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2483,7 +2483,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "生死 · 10/12",
+        .title = "生死",
         .instruction = "黑先。请吃掉白棋块。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -2502,7 +2502,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "连续打吃 · 10/24",
+        .title = "连续打吃",
         .instruction = "白先。请打吃并吃掉标记的棋子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2521,7 +2521,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "劫 · 11/24",
+        .title = "劫",
         .instruction = "白先。请制造一个劫。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2540,7 +2540,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "挡 · 2/13",
+        .title = "挡",
         .instruction = "黑先。白棋已落子1。挡住白棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -2559,7 +2559,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "双活 · 1/13",
+        .title = "双活",
         .instruction = "黑棋有两只眼和6目（5目领地加1个提子）。然而，白棋可以通过在A点落子形成双活来取消这些目数。黑棋无法吃掉角上的两颗白子：如果黑棋在B点应，会让自己的棋子陷入打吃。白先，形成双活。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2578,7 +2578,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "追杀 · 11/12",
+        .title = "追杀",
         .instruction = "黑先。追击标记的棋子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -2597,7 +2597,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "罩 · 9/12",
+        .title = "罩",
         .instruction = "白先。用罩尽可能多地吃子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2616,7 +2616,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "提子 2 · 7/24",
+        .title = "提子 2",
         .instruction = "黑先。尽可能多地吃子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -2635,7 +2635,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "扑 2 · 4/24",
+        .title = "扑 2",
         .instruction = "白先。用扑吃子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2654,7 +2654,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "连接 · 5/11",
+        .title = "连接",
         .instruction = "白先。连接白棋。选择最佳连接方式。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2673,7 +2673,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "角部 1 · 4/12",
+        .title = "角部 1",
         .instruction = "黑先。选择最佳角部封锁（缔角），A、B或C。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -2692,7 +2692,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "防守 2 · 2/12",
+        .title = "防守 2",
         .instruction = "白先。黑棋走了1。防守白棋的领地。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2711,7 +2711,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "眼1 · 5/13",
+        .title = "眼1",
         .instruction = "白先。通过扑入制造假眼。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2730,7 +2730,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "收官1 · 2/13",
+        .title = "收官1",
         .instruction = "黑先。白棋已下第1手。防守黑棋的弱点。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -2749,7 +2749,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "收官3 · 10/24",
+        .title = "收官3",
         .instruction = "下在A点的价值是多少？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -2768,7 +2768,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "死活 · 2/13",
+        .title = "死活",
         .instruction = "白先。按正确的顺序做出两只眼。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2787,7 +2787,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "死活 · 11/19",
+        .title = "死活",
         .instruction = "白先。阻止形成3点眼位，使白棋的棋块活棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2806,7 +2806,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "死活 · 2/24",
+        .title = "死活",
         .instruction = "黑先。吃掉白棋的棋块。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -2825,7 +2825,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "死活 · 12/24",
+        .title = "死活",
         .instruction = "黑先。吃掉白棋的棋块。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -2844,7 +2844,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "劫 · 3/12",
+        .title = "劫",
         .instruction = "黑先。尝试用劫争吃掉标记的棋子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -2863,7 +2863,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "行棋步法 · 8/10",
+        .title = "行棋步法",
         .instruction = "白先。对黑1的弯曲，下出好的应手（延伸）。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2882,7 +2882,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "行棋步法 · 13/24",
+        .title = "行棋步法",
         .instruction = "黑先。针对白棋标记的着法，选择最佳防守：A、B或C？",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -2901,7 +2901,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "棋形 · 6/14",
+        .title = "棋形",
         .instruction = "白棋的棋块是强形还是弱形？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -2920,7 +2920,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "对杀 · 13/15",
+        .title = "对杀",
         .instruction = "黑先。以有眼对无眼，赢得对杀。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -2939,7 +2939,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "提子 · 1/12",
+        .title = "提子",
         .instruction = "白先。尽可能多吃掉棋子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2958,7 +2958,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "提子 · 6/24",
+        .title = "提子",
         .instruction = "黑先。尽可能多吃掉棋子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -2977,7 +2977,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "提子 · 12/18",
+        .title = "提子",
         .instruction = "白先。在倒扑中尽可能多吃掉棋子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -2996,7 +2996,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "定式 · 3/12",
+        .title = "定式",
         .instruction = "白先。在黑棋1之后，选择最佳着法：A、B或C。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -3015,7 +3015,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "行棋方向 · 18/19",
+        .title = "行棋方向",
         .instruction = "白先。在黑棋1之后选择最佳后续着法，A或B。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -3034,7 +3034,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "双活 · 1/8",
+        .title = "双活",
         .instruction = "如果你想赢得对杀，你必须阻止对手制造双活。所以如果有可能形成双活，你应该小心应对。如果白棋在B位落子，黑棋可以在A位制造双活。为防止这种情况发生，白棋应在C位落子。白先。阻止双活并赢得对杀。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -3053,7 +3053,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "技巧 · 12/14",
+        .title = "技巧",
         .instruction = "白先。黑棋1之后，在A点落子是否是好的回应，还是脱先更好？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -3072,7 +3072,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "技巧 · 2/12",
+        .title = "技巧",
         .instruction = "黑先。在A点落子能加强黑棋棋块吗，还是脱先更好？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -3091,7 +3091,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "收官 · 5/12",
+        .title = "收官",
         .instruction = "黑先。选择最大的着法，A、B或C。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -3110,7 +3110,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "假眼 · 6/13",
+        .title = "假眼",
         .instruction = "白先。利用气的不足来制造一个假眼。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -3129,7 +3129,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "死活 · 7/13",
+        .title = "死活",
         .instruction = "白先。通过下先手来使棋块活棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -3148,7 +3148,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "死活 · 2/12",
+        .title = "死活",
         .instruction = "黑先。利用劫让黑棋棋块活棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -3167,7 +3167,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "死活 · 7/12",
+        .title = "死活",
         .instruction = "黑先。吃掉白棋棋块；利用假眼。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -3186,7 +3186,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "死活 · 24/24",
+        .title = "死活",
         .instruction = "黑先。吃掉白棋棋块。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -3205,7 +3205,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "死活 · 5/20",
+        .title = "死活",
         .instruction = "白棋棋块的状态是什么？死棋、活棋，还是取决于谁先落子？",
         .kind = WQ_KIND_CHOICE,
         .player = 1,
@@ -3224,7 +3224,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "对杀 · 4/13",
+        .title = "对杀",
         .instruction = "黑先。通过增加气数或防止损失气数来赢得对杀。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -3243,7 +3243,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "对杀 · 8/24",
+        .title = "对杀",
         .instruction = "黑先。赢得对杀。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -3262,7 +3262,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "对杀 · 12/12",
+        .title = "对杀",
         .instruction = "黑先。赢得对杀。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -3281,7 +3281,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "准备打吃 · 21/24",
+        .title = "准备打吃",
         .instruction = "白先。经过准备性打吃后提子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -3300,7 +3300,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "连接与切断 · 6/12",
+        .title = "连接与切断",
         .instruction = "黑先。应对这个切断。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -3319,7 +3319,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "定式 · 1/16",
+        .title = "定式",
         .instruction = "白棋在1下挂，黑棋在2下夹。白棋可以跳向中腹或在3跳入角部。在这个定式中，黑棋将白棋的1和3分断。用白棋下这个定式，从3开始。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -3338,7 +3338,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "定式 · 12/18",
+        .title = "定式",
         .instruction = "黑先。选择白棋1之后A、B或C中最佳的应答。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -3357,7 +3357,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "技巧 · 9/16",
+        .title = "技巧",
         .instruction = "黑先。下劫争以获利。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -3376,7 +3376,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "手筋 · 3/22",
+        .title = "手筋",
         .instruction = "白先。尽可能多地吃掉黑棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -3395,7 +3395,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "手筋 · 8/20",
+        .title = "手筋",
         .instruction = "黑先。尽可能多地提掉白棋棋子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -3414,7 +3414,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "手筋 · 16/20",
+        .title = "手筋",
         .instruction = "白先。尽可能多地吃掉黑棋。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -3433,7 +3433,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "手筋 · 8/14",
+        .title = "手筋",
         .instruction = "黑先。走出最佳连接。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -3452,7 +3452,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "手筋 · 7/24",
+        .title = "手筋",
         .instruction = "白先。走出最佳连接。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -3471,7 +3471,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "手筋 · 11/16",
+        .title = "手筋",
         .instruction = "黑先。走出最佳连接。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -3490,7 +3490,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "手筋 · 3/14",
+        .title = "手筋",
         .instruction = "白先。切断黑棋棋子。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -3509,7 +3509,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "对杀 · 16/23",
+        .title = "对杀",
         .instruction = "白先。赢得对杀。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -3528,7 +3528,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "对杀 · 1/20",
+        .title = "对杀",
         .instruction = "白先。赢得对杀。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -3547,7 +3547,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "对杀 · 9/20",
+        .title = "对杀",
         .instruction = "黑先。赢得对杀。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,
@@ -3566,7 +3566,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "对杀 · 17/20",
+        .title = "对杀",
         .instruction = "白先。赢得对杀。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -3585,7 +3585,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "对杀 · 5/20",
+        .title = "对杀",
         .instruction = "白先。赢得对杀。",
         .kind = WQ_KIND_PUZZLE,
         .player = 2,
@@ -3604,7 +3604,7 @@ const wq_level_t wq_levels[WQ_LEVEL_COUNT] = {
         .target_count = 0,
     },
     {
-        .title = "对杀 · 13/20",
+        .title = "对杀",
         .instruction = "黑先。赢得对杀。",
         .kind = WQ_KIND_PUZZLE,
         .player = 1,

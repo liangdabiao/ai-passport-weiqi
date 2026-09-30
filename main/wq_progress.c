@@ -75,13 +75,6 @@ bool wq_progress_record_result(wq_progress_t *progress, uint16_t level, uint8_t 
     return true;
 }
 
-bool wq_progress_unlocked(const wq_progress_t *progress, uint16_t level)
-{
-    if (level == 0) return true;
-    if (level >= (uint16_t)WQ_LEVEL_COUNT) return false;
-    return wq_progress_stars(progress, (uint16_t)(level - 1u)) > 0;
-}
-
 uint16_t wq_progress_cleared_count(const wq_progress_t *progress)
 {
     if (!progress) return 0;

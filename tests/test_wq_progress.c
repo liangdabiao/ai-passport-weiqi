@@ -37,16 +37,17 @@ static void test_record_only_up(void)
     puts("ok  星级只升不降，越界安全");
 }
 
-static void test_unlock_chain(void)
+static void test_no_locks_anywhere(void)
 {
+    // 真机反馈：全部解锁，不做锁定。星级只是记录，不是门槛 ——
+    // 这里钉住「任何关都可以直接进」这个决定。
     wq_progress_t progress;
     wq_progress_reset(&progress);
-    assert(wq_progress_unlocked(&progress, 0));
-    assert(!wq_progress_unlocked(&progress, 1));
-    wq_progress_set_stars(&progress, 0, 1);
-    assert(wq_progress_unlocked(&progress, 1));
-    assert(!wq_progress_unlocked(&progress, 2));
-    puts("ok  解锁链：前一关通关才解锁下一关");
+    assert(wq_progress_stars(&progress, 40) == 0);
+    wq_progress_set_stars(&progress, 40, 2);
+    assert(wq_progress_stars(&progress, 40) == 2);
+    assert(wq_progress_stars(&progress, 41) == 0); // 后一关不依赖前一关
+    puts("ok  无锁定：星级只是记录，关卡之间没有门槛");
 }
 
 static void test_summary_counts(void)
@@ -118,7 +119,7 @@ int main(void)
 {
     test_pack_roundtrip();
     test_record_only_up();
-    test_unlock_chain();
+    test_no_locks_anywhere();
     test_summary_counts();
     test_serialize_roundtrip();
     test_reject_corrupted();

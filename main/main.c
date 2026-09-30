@@ -6,7 +6,7 @@
 // 硬件只有三个键（上/下/确定，共用一个 ADC 分压引脚），所以全局只用一套语义：
 //   上/下 短按   在当前页面里移动（选候选 / 选菜单项）
 //   确定  短按   往下走一步（进入关卡 / 落子 / 作答 / 下一关）
-//   确定  长按   退回上一层；上/下长按在棋盘上是左右移列
+//   确定  长按   退回上一层；上/下双击在棋盘上是左右移列
 #include "bsp_audio.h"
 #include "bsp_battery.h"
 #include "bsp_button.h"
@@ -51,11 +51,18 @@ static void on_key(bsp_btn_t btn, bsp_btn_ev_t event, void *user)
 
 static bool translate(const input_event_t *input, wq_key_t *out)
 {
-    // 长按派生出三个方向：确定长按 = 返回；上 / 下长按 = 棋盘光标的左 / 右。
+    // 方向派生：确定长按 = 返回；上 / 下**双击** = 棋盘光标的左 / 右。
+    // 真机反馈：长按移列等待太久，双击跟手（BSP 早已注册 BUTTON_DOUBLE_CLICK）。
     // 列表页会忽略左右，行为不受影响。
     if (input->event == BSP_BTN_LONG) {
+        if (input->btn == BSP_BTN_OK) {
+            *out = WQ_KEY_BACK;
+            return true;
+        }
+        return false;
+    }
+    if (input->event == BSP_BTN_DOUBLE) {
         switch (input->btn) {
-            case BSP_BTN_OK:   *out = WQ_KEY_BACK;  return true;
             case BSP_BTN_UP:   *out = WQ_KEY_LEFT;  return true;
             case BSP_BTN_DOWN: *out = WQ_KEY_RIGHT; return true;
             default:           return false;

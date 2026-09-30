@@ -59,6 +59,11 @@ MARK_SHAPE_FIXED = ("triangle", "square", "circle", "cross")
 MARK_SHAPE_LABEL = re.compile(r"^([A-Z]|[0-9]{1,2})$")
 
 # ---- 设备版式上限（与 main/wq_ui.c 的 _Static_assert 互为镜像）----
+# 关卡标题剥掉网页版的「 · x/N」进度后缀（那是网页自己的导航信息，设备列表
+# 有自己的序号；真机反馈它把行内文字挤成两行）。剥完后实测最长 5 字，24px 一行
+# 放得下 —— 上限按 6 字守门，超出直接报错而不是悄悄截断。
+TITLE_STRIP_RE = re.compile(r" · \d+/\d+$")
+TITLE_SHORT_MAX_CHARS = 6
 TITLE_MAX_CHARS = 13        # 16px 顶栏，与章节进度同一行
 INSTRUCTION_MAX_CHARS = 240 # 题面页 16px 可滚动（约 19 行），宿主测试按真实数据断言行数
 QUESTION_MAX_CHARS = 190    # 选择题题干，同题面页
@@ -215,6 +220,15 @@ def _fill(level: Level, fields: dict[str, list[str]], where: str) -> None:
     level.kind = one("kind")
     level.title = one("title")
     level.instruction = one("instruction")
+    # 剥掉「 · x/N」后缀。源文件里每一关都该带后缀（抽取器保证）；剥完为空或
+    # 超长都说明源文件被动过且没过抽取器 —— 响亮报错。
+    level.title = TITLE_STRIP_RE.sub("", level.title).strip()
+    if not level.title:
+        raise ContentError(f"{where}: 标题剥掉进度后缀后为空")
+    if len(level.title) > TITLE_SHORT_MAX_CHARS:
+        raise ContentError(
+            f"{where}: 标题 {level.title!r} 长 {len(level.title)} 字，"
+            f"超出剥后缀上限 {TITLE_SHORT_MAX_CHARS}")
 
     if level.chapter not in CHAPTER_IDS:
         raise ContentError(f"{where}: 未知章节 {level.chapter!r}")

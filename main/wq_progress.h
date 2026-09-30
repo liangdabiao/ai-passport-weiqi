@@ -3,8 +3,8 @@
 // 内容（关卡、棋面、题干）是固定的，值得留下来的只有「闯到哪了、各关拿了几星」。
 // 这一版存档做两件事：
 //
-//   1. 每关星级 0..3（0 = 未通关）。解锁规则是纯派生：第 i 关解锁当且仅当
-//      i == 0 或第 i-1 关星级 > 0 —— 存档里不需要单独的解锁位。
+//   1. 每关星级 0..3（0 = 未通关）。真机反馈：全部解锁、不做锁定 —— 想练
+//      哪关就进哪关，星级只做记录不做门槛。
 //   2. 记录最近进入的关卡，标题页「继续闯关」直接跳过去。
 //
 // 存档格式刻意严格：魔数 + 版本 + 校验和，任何一项不符就整体拒绝并回到空档，
@@ -54,9 +54,6 @@ void wq_progress_set_stars(wq_progress_t *progress, uint16_t level, uint8_t star
 
 // 只升不降：取已有星级与本次的较大者。返回是否发生了变化。
 bool wq_progress_record_result(wq_progress_t *progress, uint16_t level, uint8_t stars);
-
-// 解锁判定：首关恒解锁；其余看前一关是否通关（星级 > 0）。
-bool wq_progress_unlocked(const wq_progress_t *progress, uint16_t level);
 
 // 汇总：已通关数与总星数（标题页成绩行、世界地图用）。
 uint16_t wq_progress_cleared_count(const wq_progress_t *progress);
