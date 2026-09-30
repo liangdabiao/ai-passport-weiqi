@@ -14,18 +14,15 @@ run_static_checks() {
 
     python3 tools/check_repo.py
     # 生成物与内容源必须同步：题库改了却忘了重新生成 C 表，在这里就失败。
-    PYTHONDONTWRITEBYTECODE=1 python3 tools/qiaopi/gen_content.py --check
-    # 音频 blob 同理。--check 不重新编码，只核对 blob 的索引与 clips.txt 是否
-    # 自洽、以及源素材是否被动过（源素材不在本机时明确跳过 sha256 那一段，
-    # 不假装通过），所以 CI 上不需要 ffmpeg。
-    PYTHONDONTWRITEBYTECODE=1 python3 tools/qiaopi/gen_audio.py --check
+    PYTHONDONTWRITEBYTECODE=1 python3 tools/weiqi/gen_content.py --check
+    # 本应用没有音频资产（音效全靠 RTTTL 合成），没有 gen_audio 这一道。
     # 字库清单同理：新增界面文案或新增一道题后忘了重跑字库生成器，charset.txt
     # 就会与源文件脱节。这一步要 fontTools 才能逐个码点核对母字体覆盖，而 CI
     # 镜像不装 fontTools —— 缺依赖时明确跳过并说明，不假装通过。
     if python3 -c "import fontTools" >/dev/null 2>&1; then
-        PYTHONDONTWRITEBYTECODE=1 python3 tools/qiaopi/gen_font.py --check
+        PYTHONDONTWRITEBYTECODE=1 python3 tools/weiqi/gen_font.py --check
     else
-        echo "skip: tools/qiaopi/gen_font.py --check（当前 python3 无 fontTools；字库清单同步未校验）" >&2
+        echo "skip: tools/weiqi/gen_font.py --check（当前 python3 无 fontTools；字库清单同步未校验）" >&2
     fi
 
     actionlint_bin="${ACTIONLINT_BIN:-}"
@@ -37,7 +34,7 @@ run_static_checks() {
     fi
     "${actionlint_bin}" -color .github/workflows/*.yml
 
-    test_dir="$(mktemp -d /tmp/qiaopi-host-tests.XXXXXX)"
+    test_dir="$(mktemp -d /tmp/weiqi-host-tests.XXXXXX)"
     "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain \
         tests/test_ui_pixel_math.c main/ui_pixel_math.c \
         -o "${test_dir}/test_ui_pixel_math"
@@ -47,54 +44,32 @@ run_static_checks() {
         -o "${test_dir}/test_demo_navigation"
     "${test_dir}/test_demo_navigation"
 
-    # 本应用的纯逻辑层：ADPCM 解码、音频 blob 索引、题库访问、折行、答题状态机、
-    # 进度存档。它们刻意不依赖 ESP-IDF/LVGL，所以能在宿主机上直接跑。
+    # 本应用的纯逻辑层：围棋规则引擎、关卡内容、闯关状态机、进度存档、
+    # 音量档位与折行。它们刻意不依赖 ESP-IDF/LVGL，所以能在宿主机上直接跑。
     #
-    # test_qpq_adpcm 断言的是「C 解码器与 Python 参考实现逐位一致」—— 编码器与
-    # 解码器任一侧被改动都会被抓住。固定向量由 gen_audio.py 生成。
-    "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain \
-        tests/test_qpq_adpcm.c main/qpq_adpcm.c \
-        -o "${test_dir}/test_qpq_adpcm"
-    "${test_dir}/test_qpq_adpcm"
+    # test_wq_engine 断言的是「C 引擎与 tools/weiqi/extract_levels.mjs 的校验器
+    # 同一套规则」：气 / 提子 / 禁自杀 / 简单劫的单元用例 + 全题库正解路径重放。
+    "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain         tests/test_wq_engine.c main/wq_engine.c main/wq_content.c         -o "${test_dir}/test_wq_engine"
+    "${test_dir}/test_wq_engine"
 
-    # 这个还会打开真实的 assets/audio/qpq_audio.bin 核对片段数与总样本数
-    # （文件不在位时明确跳过那一段）。
-    "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain \
-        tests/test_qpq_audio_index.c main/qpq_audio_index.c main/qpq_adpcm.c \
-        -o "${test_dir}/test_qpq_audio_index"
-    "${test_dir}/test_qpq_audio_index"
+    "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain         tests/test_wq_content.c main/wq_content.c         -o "${test_dir}/test_wq_content"
+    "${test_dir}/test_wq_content"
 
-    # 音量档位与缩放。它断言的是「默认档位下的听感与加入音量功能之前完全一致」
-    # —— 基准值 100/75/63 乘以默认档位 80% 必须正好等于旧的固定值 80/60/50。
-    # 那句话如果只写在注释里，把 63 改成 64 谁也不会发现。
-    "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain \
-        tests/test_qpq_volume.c main/qpq_volume.c \
-        -o "${test_dir}/test_qpq_volume"
-    "${test_dir}/test_qpq_volume"
+    # 音量档位与缩放。它断言的是「基准值乘以默认档位」这一算术不被悄悄改动。
+    "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain         tests/test_wq_volume.c main/wq_volume.c         -o "${test_dir}/test_wq_volume"
+    "${test_dir}/test_wq_volume"
 
-    # test_qpq_wrap 刻意连了 qpq_content/qpq_text：它断言的是「真实题库里那句话
-    # 在真实每行字数预算下都放得下」，也就是「一屏放得下」这句话本身。两种显示
-    # 形态（答题页的槽位、判卷页的已填空）都要过。
-    "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain \
-        tests/test_qpq_wrap.c main/qpq_wrap.c main/qpq_content.c main/qpq_text.c \
-        -o "${test_dir}/test_qpq_wrap"
-    "${test_dir}/test_qpq_wrap"
-    "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain \
-        tests/test_qpq_content.c main/qpq_content.c main/qpq_wrap.c main/qpq_text.c \
-        -o "${test_dir}/test_qpq_content"
-    "${test_dir}/test_qpq_content"
-    "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain \
-        tests/test_qpq_session.c main/qpq_session.c main/qpq_content.c \
-        main/qpq_wrap.c main/qpq_text.c \
-        -o "${test_dir}/test_qpq_session"
-    "${test_dir}/test_qpq_session"
-    "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain \
-        tests/test_qpq_progress.c main/qpq_progress.c main/qpq_session.c \
-        main/qpq_content.c main/qpq_wrap.c main/qpq_text.c \
-        -o "${test_dir}/test_qpq_progress"
-    "${test_dir}/test_qpq_progress"
+    # test_wq_wrap 刻意连了 wq_content：它断言的是「真实题库里每段说明在真实
+    # 每行字数预算下都折得进缓冲」，也就是「一屏放得下」这句话本身。
+    "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain         tests/test_wq_wrap.c main/wq_wrap.c main/wq_content.c         -o "${test_dir}/test_wq_wrap"
+    "${test_dir}/test_wq_wrap"
 
-    "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Icomponents/bsp/src \
+    "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain         tests/test_wq_session.c main/wq_session.c main/wq_engine.c main/wq_content.c         -o "${test_dir}/test_wq_session"
+    "${test_dir}/test_wq_session"
+
+    "${CC:-cc}" -std=c11 -Wall -Wextra -Werror -Imain         tests/test_wq_progress.c main/wq_progress.c         -o "${test_dir}/test_wq_progress"
+    "${test_dir}/test_wq_progress"
+
         tests/test_bsp_display_rounding.c components/bsp/src/bsp_display_rounding.c \
         -o "${test_dir}/test_bsp_display_rounding"
     "${test_dir}/test_bsp_display_rounding"
@@ -140,8 +115,8 @@ run_firmware_checks() (
         return 1
     fi
 
-    validation_build_dir="$(mktemp -d /tmp/qiaopi-firmware.XXXXXX)"
-    trap 'case "${validation_build_dir}" in /tmp/qiaopi-firmware.*) rm -rf -- "${validation_build_dir}" ;; esac' EXIT
+    validation_build_dir="$(mktemp -d /tmp/weiqi-firmware.XXXXXX)"
+    trap 'case "${validation_build_dir}" in /tmp/weiqi-firmware.*) rm -rf -- "${validation_build_dir}" ;; esac' EXIT
 
     SDKCONFIG_DEFAULTS="${repo_root}/sdkconfig.defaults" \
         idf.py -B "${validation_build_dir}" \

@@ -4,7 +4,7 @@
 
 # 让字库度量决定版式
 
-在[侨批填字问答](qiaopi-quiz/README.md)里攒下的经验。那个应用里所有的版式 bug 都出自
+在[侨批填字问答](weiqi-quest/README.md)里攒下的经验。那个应用里所有的版式 bug 都出自
 同一个习惯：先给行高挑个整数，先把文案写好，然后才发现字库不同意。这篇讲的是替代
 「凭感觉」的那套算术，以及它逼出来的几个决定。
 
@@ -143,7 +143,7 @@ _Static_assert(TITLE_STATS_Y + TITLE_STATS_H <= TITLE_MENU_Y, "成绩行与菜�
 
 ## 相关
 
-- [侨批填字问答](qiaopi-quiz/README.zh_CN.md) —— 这些常量管辖的页面。
+- [侨批填字问答](weiqi-quest/README.zh_CN.md) —— 这些常量管辖的页面。
 - [为 LVGL 裁剪中文字库子集](cjk-font-subsetting-for-lvgl.zh_CN.md) —— 字号与行高
   的来处。
 - [把应用逻辑留在主机上](host-testable-app-logic.zh_CN.md) —— 断言真实内容仍然放得进

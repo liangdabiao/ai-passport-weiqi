@@ -4,7 +4,7 @@
 
 # Keeping application logic on the host
 
-Written for the [Qiaopi Quiz app](qiaopi-quiz/README.md), a port of a web quiz to a
+Written for the [Qiaopi Quiz app](weiqi-quest/README.md), a port of a web quiz to a
 three-key handheld. The firmware is roughly 1900 lines of interface and service
 code, but the part that decides anything — how a round is drawn, how it is scored,
 how text is broken into lines, how audio is decoded, how progress is stored — is
@@ -106,7 +106,7 @@ testable: mark all but three questions as seen and assert those three appear.
 
 ## Related
 
-- [Qiaopi Quiz app](qiaopi-quiz/README.md) — the modules and the pages on top.
+- [Qiaopi Quiz app](weiqi-quest/README.md) — the modules and the pages on top.
 - [Letting font metrics decide the layout](font-metrics-driven-layout.md) — the
   budgets the content test asserts against.
 - [Building ESP-IDF firmware from Git Bash on Windows](windows-git-bash-esp-idf.md)

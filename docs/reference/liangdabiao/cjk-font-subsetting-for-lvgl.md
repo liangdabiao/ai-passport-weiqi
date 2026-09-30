@@ -4,7 +4,7 @@
 
 # Subsetting a CJK font for LVGL
 
-Recorded while building the [Qiaopi Quiz app](qiaopi-quiz/README.md), an offline
+Recorded while building the [Qiaopi Quiz app](weiqi-quest/README.md), an offline
 fill-in-the-blank game for the FoloToy AI Passport. Everything below applies to any
 application on this board that has to render Chinese; every number was measured on
 an ESP32-C3 with 8 MB of flash and no PSRAM.
@@ -127,7 +127,7 @@ it, from 1.05 MB of bitmap data to 0.95 MB.
 
 ## Related
 
-- [Qiaopi Quiz app](qiaopi-quiz/README.md) — the subsets these serve.
+- [Qiaopi Quiz app](weiqi-quest/README.md) — the subsets these serve.
 - [Turning a prose bank into generated C tables](question-bank-pipeline.md) — the
   module that supplies the content half of the inventory.
 - [Letting font metrics decide the layout](font-metrics-driven-layout.md) — the

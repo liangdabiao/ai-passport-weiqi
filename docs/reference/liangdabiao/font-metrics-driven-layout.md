@@ -4,7 +4,7 @@
 
 # Letting font metrics decide the layout
 
-Recorded while building the [Qiaopi Quiz app](qiaopi-quiz/README.md). Every layout
+Recorded while building the [Qiaopi Quiz app](weiqi-quest/README.md). Every layout
 bug in it came from the same habit: pick a round line height, write the copy, then
 discover that the font disagrees. This entry is the arithmetic that replaced the
 guessing, and the decisions it forced.
@@ -168,7 +168,7 @@ shrinking anything.
 
 ## Related
 
-- [Qiaopi Quiz app](qiaopi-quiz/README.md) — the pages these constants govern.
+- [Qiaopi Quiz app](weiqi-quest/README.md) — the pages these constants govern.
 - [Subsetting a CJK font for LVGL](cjk-font-subsetting-for-lvgl.md) — where the
   sizes and line heights come from.
 - [Keeping application logic on the host](host-testable-app-logic.md) — the test

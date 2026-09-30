@@ -68,7 +68,7 @@ The engineering rules themselves live under
 
 **Application playbooks:**
 
-- [Qiaopi Quiz](liangdabiao/qiaopi-quiz/README.md) — an offline fill-in-the-blank quiz built from real overseas-remittance letters: 91 questions drawn 20 at a time, four candidates per question, a dialect narration of the correct sentence after each answer, and a question bank that prefers questions the reader has not seen yet.
+- [Weiqi Quest](liangdabiao/weiqi-quest/README.md) — a Go puzzle ladder on a three-key handheld: 154 levels in 7 chapters, 19x19 positions cropped into a 9x9 window by bounding box, solution paths judged under the full rules on the device.
 
 ## Adding an experience entry
 

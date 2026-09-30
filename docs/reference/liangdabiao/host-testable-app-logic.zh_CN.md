@@ -4,7 +4,7 @@
 
 # 把应用逻辑留在主机上
 
-为[侨批填字问答](qiaopi-quiz/README.md)而写：一个把网页问答搬到三键手持机上的移植。
+为[侨批填字问答](weiqi-quest/README.md)而写：一个把网页问答搬到三键手持机上的移植。
 固件大约 1900 行界面与服务代码，但真正做决定的那部分 —— 一局怎么抽题、怎么判分、
 文本怎么折行、音频怎么解码、进度怎么存 —— 是约 890 行手写加 1333 行生成代码，
 它们完全不碰 ESP-IDF 与 LVGL，在开发机上编译运行，对着 1658 行测试，不接板子。
@@ -91,7 +91,7 @@ ok  答题页的槽位形态：最多 3 行、单行最多 8 字（预算 3 行 
 
 ## 相关
 
-- [侨批填字问答](qiaopi-quiz/README.zh_CN.md) —— 这些模块，以及压在它们上面的页面。
+- [侨批填字问答](weiqi-quest/README.zh_CN.md) —— 这些模块，以及压在它们上面的页面。
 - [让字库度量决定版式](font-metrics-driven-layout.zh_CN.md) —— 内容测试所断言的
   那些预算。
 - [在 Windows 的 Git Bash 里构建 ESP-IDF 固件](windows-git-bash-esp-idf.zh_CN.md)

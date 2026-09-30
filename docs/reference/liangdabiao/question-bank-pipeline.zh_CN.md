@@ -4,7 +4,7 @@
 
 # 把散文题库整理成生成的 C 数组
 
-为移植[侨批填字问答](qiaopi-quiz/README.md)时攒下的经验。这个应用有 91 道题，每道题
+为移植[侨批填字问答](weiqi-quest/README.md)时攒下的经验。这个应用有 91 道题，每道题
 取自一封真实的侨批信件。整条管线一页写得完，而其中的每条规矩都对应着一个具体的
 失败。
 
@@ -111,7 +111,7 @@ python3 tools/qiaopi/gen_content.py --check    # 过期就失败
 
 ## 相关
 
-- [侨批填字问答](qiaopi-quiz/README.zh_CN.md) —— 这条管线服务的应用。
+- [侨批填字问答](weiqi-quest/README.zh_CN.md) —— 这条管线服务的应用。
 - [为 LVGL 裁剪中文字库子集](cjk-font-subsetting-for-lvgl.zh_CN.md) —— 同一个内容
   模块的另一个消费者。
 - [把应用逻辑留在主机上](host-testable-app-logic.zh_CN.md) —— 生成的表是怎么被拿去

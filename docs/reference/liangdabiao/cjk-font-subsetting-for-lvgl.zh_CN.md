@@ -4,7 +4,7 @@
 
 # 为 LVGL 裁剪中文字库子集
 
-在[侨批填字问答](qiaopi-quiz/README.md)（FoloToy AI Passport 上的离线填字游戏）里
+在[侨批填字问答](weiqi-quest/README.md)（FoloToy AI Passport 上的离线填字游戏）里
 攒下的经验。下面每条对这块板子上任何需要显示中文的应用都适用；所有数字都是在
 8 MB Flash、无 PSRAM 的 ESP32-C3 上实测的。
 
@@ -104,7 +104,7 @@ LVGL 默认文本格式字库里，每个字形的位图偏移量用 16 位存�
 
 ## 相关
 
-- [侨批填字问答](qiaopi-quiz/README.zh_CN.md) —— 这三档子集服务的应用。
+- [侨批填字问答](weiqi-quest/README.zh_CN.md) —— 这三档子集服务的应用。
 - [把散文题库整理成生成的 C 数组](question-bank-pipeline.zh_CN.md) —— 提供字符清单
   里「内容」那一半的模块。
 - [让字库度量决定版式](font-metrics-driven-layout.zh_CN.md) —— 这三档字号推出来的

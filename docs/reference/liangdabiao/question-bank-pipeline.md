@@ -4,7 +4,7 @@
 
 # Turning a prose bank into generated C tables
 
-Recorded while porting the [Qiaopi Quiz app](qiaopi-quiz/README.md), a
+Recorded while porting the [Qiaopi Quiz app](weiqi-quest/README.md), a
 fill-in-the-blank game whose 91 questions come from real overseas-remittance
 letters. The pipeline is small enough to describe in one page, and every rule in
 it exists because breaking it produced a specific failure.
@@ -128,7 +128,7 @@ sentence, days later.
 
 ## Related
 
-- [Qiaopi Quiz app](qiaopi-quiz/README.md) — the application this pipeline feeds.
+- [Qiaopi Quiz app](weiqi-quest/README.md) — the application this pipeline feeds.
 - [Subsetting a CJK font for LVGL](cjk-font-subsetting-for-lvgl.md) — the other
   consumer of the same content module.
 - [Keeping application logic on the host](host-testable-app-logic.md) — how the

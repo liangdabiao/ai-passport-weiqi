@@ -4,7 +4,7 @@
 
 # Building ESP-IDF Firmware from Git Bash on Windows
 
-Recorded while building the [Qiaopi Quiz app](qiaopi-quiz/README.md)
+Recorded while building the [Qiaopi Quiz app](weiqi-quest/README.md)
 from a Git Bash (MSYS2) shell on Windows with ESP-IDF 5.5.3. Two things block you
 outright, one of them is not fixable from inside the shell, and one pre-existing
 part of the test suite genuinely cannot run there.
@@ -211,7 +211,7 @@ has to be answered with the hash you recorded at build time, not by rebuilding.
 
 ## Related documents
 
-- [Qiaopi Quiz app](qiaopi-quiz/README.md) — the build these notes
+- [Qiaopi Quiz app](weiqi-quest/README.md) — the build these notes
   come from, including its verification results.
 - [Keeping application logic on the host](host-testable-app-logic.md) — the tests
   that do run here, and why they are portable.

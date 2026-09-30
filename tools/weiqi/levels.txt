@@ -1,0 +1,1703 @@
+# 围棋闯关 —— 设备版关卡源文件
+#
+# 本文件是内容的事实来源。它由 tools/weiqi/extract_levels.mjs 从网页版
+# （D:\online-go.com-main\go-game，AGPLv3）求值抽取并裁剪而来；之后请直接编辑本文件，不要重跑抽取器，
+# 除非你确认网页版才是更新的那一份。
+#
+# 坐标是 9x9 窗口内的 goban 二字码（aa=左上，ii=右下），棋子按 black/white 两行
+# 书写；正解路径以 | 分隔，每条路径是从玩家先手开始的连续着法二字码串联。
+== 001 fundamentals-rules-intro-3
+chapter: fundamentals
+kind: puzzle
+title: 围棋游戏 · 3/6
+player: white
+black: cg
+white: 
+mark: cross:bgdgchcf
+correct: bg | dg | ch | cf
+instruction: 棋子相邻的空点叫做『气』。请填上黑子的一个气。
+
+== 002 fundamentals-rules-intro-4
+chapter: fundamentals
+kind: puzzle
+title: 围棋游戏 · 4/6
+player: white
+black: cg
+white: bgchcf
+mark: cross:dg
+correct: dg
+instruction: 当一个棋子所有的气都被对方棋子占满，它就被吃掉了。请填上黑子的最后一口气把它吃掉。
+
+== 003 fundamentals-rules-intro-6
+chapter: fundamentals
+kind: puzzle
+title: 围棋游戏 · 6/6
+player: white
+black: cgcfdf
+white: bgbfchcedgde
+mark: cross:ef
+correct: ef
+instruction: 这条黑链只剩一气了，这叫做『打吃』（atari）。请吃掉这条被打吃的黑链。
+
+== 004 fundamentals-self-capture-1
+chapter: fundamentals
+kind: puzzle
+title: 自杀 · 1/3
+player: white
+black: ceeedfffegehhagbibhc
+white: eddefegffg
+mark: A:ia
+mark: B:hb
+mark: C:ef
+mark: triangle:eeff
+correct: ef
+instruction: 白先。下在 A 或 B 是『自杀』（白没有气），不允许。但下在 C 是允许的，因为能吃掉标▲的黑子从而给自己造出气。请吃掉标▲的黑子。
+
+== 005 fundamentals-self-capture-2
+chapter: fundamentals
+kind: puzzle
+title: 自杀 · 2/3
+player: white
+black: efffcgdgggehfh
+white: eefecfdfgfeg
+correct: fg
+instruction: 白先。双方都被打吃。没有气的着法不允许，除非能吃掉对方。请吃掉一颗或更多黑子。
+
+== 006 fundamentals-self-capture-3
+chapter: fundamentals
+kind: puzzle
+title: 自杀 · 3/3
+player: white
+black: becfagbgchdhehciei
+white: cgdgegahbhfhbifi
+correct: di
+instruction: 白先。双方都被打吃。没有气的着法不允许，除非能吃掉对方。请吃掉一颗或更多黑子。
+
+== 007 fundamentals-eyes-1
+chapter: fundamentals
+kind: puzzle
+title: 眼 · 1/4
+player: black
+black: cichcgdgegfgggghgi
+white: ccdbecdddidhehfhfi
+mark: A:dc
+mark: B:ei
+correct: ei
+instruction: A 点被白子包围，这叫『眼』。黑不能下在 A（自吃）。B 点也是眼，但黑可以下在 B 并吃掉白子。请吃掉这些白子。
+
+== 008 fundamentals-eyes-2
+chapter: fundamentals
+kind: puzzle
+title: 眼 · 2/4
+player: black
+black: agbgcgdgdhdi
+white: ahbhchci
+correct: aibiai | biaibi
+instruction: 白棋有一个由两个空点组成的大眼，但白棋并不安全。黑先，逐一填眼吃掉白棋。
+
+== 009 fundamentals-eyes-3
+chapter: fundamentals
+kind: puzzle
+title: 眼 · 3/4
+player: black
+black: agbgcgdgegeheigagbgcgdgeheie
+white: ahbhchdhdibihahbhchdid
+correct: ibicia
+instruction: 白棋有两块棋。一块有两只眼，另一块只有一个大眼。两眼的那块是活的，永远吃不掉。黑先，吃掉那块可以吃的白棋。
+
+== 010 fundamentals-eyes-4
+chapter: fundamentals
+kind: puzzle
+title: 眼 · 4/4
+player: black
+black: agbgcgdgegeheigagbgcgdheie
+white: ahbhchdhdibihahbhcibid
+mark: A:ia
+mark: B:ic
+correct: hdicia
+instruction: 一块白棋有两只『真眼』。另一块在 A 处有真眼、在 B 处是『假眼』。假眼不安全，可以被攻破。黑先，从假眼入手吃掉这块白棋。
+
+== 011 fundamentals-ko-1
+chapter: fundamentals
+kind: puzzle
+title: 劫 · 1/5
+player: black
+black: ebedfc
+white: ccdbecdd
+mark: triangle:ec
+correct: dc
+instruction: 为了避免无限互相提子，有一条特殊规则叫『劫规』：禁止立即提回同样的形状。黑可以吃掉标▲的白子，但白不能立刻提回。白必须先在别处下一手。请吃掉标▲的白子。
+
+== 012 fundamentals-ko-2
+chapter: fundamentals
+kind: puzzle
+title: 劫 · 2/5
+player: black
+black: afbfcfcgdhcidi
+white: agbgahchbi
+correct: bhdgai
+instruction: 利用劫规吃掉这块白棋。
+
+== 013 fundamentals-ko-3
+chapter: fundamentals
+kind: puzzle
+title: 劫 · 3/5
+player: black
+black: ecedeedfegehfh
+white: fdcedefeefgfcgdgfg
+correct: ffcfef
+instruction: 请把你的黑子连接起来。
+
+== 014 fundamentals-ko-4
+chapter: fundamentals
+kind: puzzle
+title: 劫 · 4/5
+player: black
+black: fcfdgehfggfhgh
+white: edfeefgffgeh
+correct: ffegee
+instruction: 利用劫规吃掉这两颗白子。
+
+== 015 fundamentals-ko-5
+chapter: fundamentals
+kind: puzzle
+title: 劫 · 5/5
+player: black
+black: bccccdcecfbgahchbi
+white: babbacbdaebebfag
+mark: 1:ag
+mark: triangle:aebfbebd
+correct: abaaafadab
+instruction: 白刚走了 1 吃掉一颗黑子。要绕过劫规，请为黑棋找一个白必须应的地方下子，这叫做『劫材』。然后黑就能吃掉标▲的白棋。
+
+== 016 fundamentals-territory-1
+chapter: fundamentals
+kind: multipleChoice
+title: 领地 · 1/12
+player: black
+black: fifhgigghhhgig
+white: eiehegfggfhfif
+question: 如果你用棋子包围了棋盘的一部分，这部分就称为你的'领地'。领地中的每个空交叉点都为你计一分。分数可以通过领地和提子来获得。游戏结束时，得分最多者获胜。角部的领地有多少分？
+options: 3 / 4 / 5
+answer: 2
+instruction: 如果你用棋子包围了棋盘的一部分，这部分就称为你的'领地'。领地中的每个空交叉点都为你计一分。分数可以通过领地和提子来获得。游戏结束时，得分最多者获胜。角部的领地有多少分？
+
+== 017 fundamentals-territory-2
+chapter: fundamentals
+kind: multipleChoice
+title: 领地 · 2/12
+player: black
+black: didhdgegffgfhfif
+white: eiehfhfggghihgig
+question: 角部的领地有多少分？
+options: 6 / 7 / 8
+answer: 1
+instruction: 角部的领地有多少分？
+
+== 018 fundamentals-territory-3
+chapter: fundamentals
+kind: multipleChoice
+title: 领地 · 3/12
+player: black
+black: didhdgdfeieffegfgehfif
+white: ehegfifgffgghihgig
+question: 角部的领地有多少分？
+options: 5 / 6 / 7
+answer: 2
+instruction: 角部的领地有多少分？
+
+== 019 fundamentals-territory-4
+chapter: fundamentals
+kind: multipleChoice
+title: 领地 · 4/12
+player: black
+black: fifhfggfhhhfif
+white: eiehegeeffgeheie
+question: 角部的领地有多少分？
+options: 7 / 8 / 9
+answer: 2
+instruction: 角部的领地有多少分？
+
+== 020 fundamentals-territory-5
+chapter: fundamentals
+kind: multipleChoice
+title: 领地 · 5/12
+player: black
+black: eiehfgeeffgeheie
+white: fifhgggfhhhfif
+question: 角部的领地有多少分？
+options: 7 / 8 / 9
+answer: 1
+instruction: 角部的领地有多少分？
+
+== 021 fundamentals-territory-6
+chapter: fundamentals
+kind: multipleChoice
+title: 领地 · 6/12
+player: black
+black: eiehegfggghihgig
+white: didhdgdfefffgfhfif
+question: 角部的领地有多少分？
+options: 6 / 7 / 8
+answer: 2
+instruction: 角部的领地有多少分？
+
+== 022 fundamentals-territory-7
+chapter: fundamentals
+kind: multipleChoice
+title: 领地 · 7/12
+player: black
+black: eiehegfggghhhfif
+white: didhdgdfefffgfheie
+question: 角部的领地有多少分？
+options: 8 / 9 / 10
+answer: 2
+instruction: 角部的领地有多少分？
+
+== 023 fundamentals-territory-8
+chapter: fundamentals
+kind: multipleChoice
+title: 领地 · 8/12
+player: black
+black: bibhbgcgdgegffgfhfigif
+white: cichdhehfggghihgih
+question: 角部的领地有多少分？
+options: 7 / 8 / 9
+answer: 2
+instruction: 角部的领地有多少分？
+
+== 024 fundamentals-territory-9
+chapter: fundamentals
+kind: multipleChoice
+title: 领地 · 9/12
+player: black
+black: cichcgcfcedeeefegeheie
+white: didhdgdfefffghgfhfif
+question: 角部的领地有多少分？
+options: 12 / 14 / 15
+answer: 2
+instruction: 角部的领地有多少分？
+
+== 025 fundamentals-territory-10
+chapter: fundamentals
+kind: multipleChoice
+title: 领地 · 10/12
+player: black
+black: didhdgegfggghgig
+white: cichcgcfdfefffgfhfif
+question: 角部的领地有多少分？
+options: 8 / 10 / 12
+answer: 2
+instruction: 角部的领地有多少分？
+
+== 026 fundamentals-territory-11
+chapter: fundamentals
+kind: multipleChoice
+title: 领地 · 11/12
+player: black
+black: fifhfggggfhhhfif
+white: eiehegeeffgehgheie
+question: 对手在你的领地里的棋子如果缺少两个眼，就会被吃掉。这些被吃的棋子称为'死子'。在游戏结束时，死子作为俘虏被从棋盘上提走，留下一个空的领地交叉点。因此，一个死子相当于两分：一分是俘虏，一分是领地。角部的领地有多少分？
+options: 6 / 7 / 8
+answer: 3
+instruction: 对手在你的领地里的棋子如果缺少两个眼，就会被吃掉。这些被吃的棋子称为'死子'。在游戏结束时，死子作为俘虏被从棋盘上提走，留下一个空的领地交叉点。因此，一个死子相当于两分：一分是俘虏，一分是领地。角部的领地有多少分？
+
+== 027 fundamentals-territory-12
+chapter: fundamentals
+kind: multipleChoice
+title: 领地 · 12/12
+player: black
+black: cichcgcfdfeheffhffgfhfif
+white: didhdgegfgghgghgig
+question: 角部的领地有多少分？
+options: 7 / 9 / 11
+answer: 3
+instruction: 角部的领地有多少分？
+
+== 028 fundamentals-ending-the-game-1
+chapter: fundamentals
+kind: endingGame
+title: 对局结束 · 1/3
+player: black
+black: fafbgbhbgdhdcedeheiebfdfefgfhfagcgegfggg
+white: eahaebibbcccecfcgchcicadcdddfdidaebeeefegeafff
+interaction: pass
+instruction: 轮到你落子时，你并非必须在棋盘上放置棋子。你可以选择停一手。当双方都认为没有更好的着法时，通过双方连续停一手来结束这局棋。本局已经结束。请点击“停一手”来结束对局。
+
+== 029 fundamentals-ending-the-game-2
+chapter: fundamentals
+kind: endingGame
+title: 对局结束 · 2/3
+player: black
+black: fafbgbhbgdhdcedeheiebfdfefgfhfagcgegfggg
+white: eahaebibbcccecfcgchcicadcdddfdidaebeeefegeafff
+interaction: stoneRemoval
+targets: fafbgbhb
+instruction: 双方都停一手后，会进入“提子阶段”，此时你可以从棋局中移除明显已死的棋子。请点击并移除那些死掉的黑棋棋子。
+
+== 030 fundamentals-ending-the-game-3
+chapter: fundamentals
+kind: endingGame
+title: 对局结束 · 3/3
+player: black
+black: gdhdcedeheiebfdfefgfhfagcgegfggg
+white: eahaebibbcccecfcgchcicadcdddfdidaebeeefegeafff
+interaction: finish
+instruction: 移除死子后，计算黑白双方领地的大小。黑棋领地有24目。白棋领地有18目，加上被吃的4颗死子，共计22目。因此，黑棋赢得了本局。请点击“完成”来结束对局。
+
+== 031 basic-principles-count-liberties-1
+chapter: basic-principles
+kind: multipleChoice
+title: 气 · 1/12
+player: black
+black: ee
+white: ddde
+question: 计算黑棋棋串的气数。
+options: 3 / 4 / 6
+answer: 1
+instruction: 计算黑棋棋串的气数。
+
+== 032 basic-principles-count-liberties-8
+chapter: basic-principles
+kind: multipleChoice
+title: 气 · 8/12
+player: black
+black: ecfcgced
+white: ebfbgbhbhddeee
+question: 计算黑棋棋串的气数。
+options: 4 / 5 / 6
+answer: 2
+instruction: 计算黑棋棋串的气数。
+
+== 033 basic-principles-count_chains-4
+chapter: basic-principles
+kind: multipleChoice
+title: 棋串 · 4/6
+player: black
+black: echbgdgehhhigfcecfcgdh
+white: dcedcdfbgbgchgigghih
+question: 计算白棋棋串的数量。
+options: 3 / 5 / 6
+answer: 3
+instruction: 计算白棋棋串的数量。
+
+== 034 basic-principles-in_atari-6
+chapter: basic-principles
+kind: multipleChoice
+title: 打吃 · 6/6
+player: black
+black: dgdfcecddceeed
+white: bhcgcfdhdeef
+question: 标记的棋串是否处于打吃状态？
+options: 是 / 否
+answer: 1
+instruction: 标记的棋串是否处于打吃状态？
+
+== 035 basic-principles-count-atari-7
+chapter: basic-principles
+kind: multipleChoice
+title: 计算打吃 · 7/12
+player: black
+black: cgcedfddegef
+white: chcfdhdgff
+question: 有多少个白棋棋串处于打吃状态？
+options: 0 / 1 / 2
+answer: 2
+instruction: 有多少个白棋棋串处于打吃状态？
+
+== 036 basic-principles-capture_stone-3
+chapter: basic-principles
+kind: puzzle
+title: 提子 · 3/6
+player: black
+black: egehdi
+white: fgfhei
+mark: triangle:ei
+correct: fi
+instruction: 黑先。吃掉被标记的白棋。
+
+== 037 basic-principles-capture_chain-5
+chapter: basic-principles
+kind: puzzle
+title: 吃掉棋串 · 5/16
+player: black
+black: dddebfcfefff
+white: eedfbgcgegfg
+correct: dg
+instruction: 黑先。吃掉一个或多个白棋。
+
+== 038 basic-principles-capture_chain-12
+chapter: basic-principles
+kind: puzzle
+title: 吃掉棋串 · 12/16
+player: white
+black: hfchfhghdieihi
+white: fcceefdhehci
+correct: fi
+instruction: 白先。吃掉一个或多个黑棋。
+
+== 039 basic-principles-both_atari-4
+chapter: basic-principles
+kind: puzzle
+title: 双方打吃 · 4/12
+player: white
+black: efffcgdgggehfh
+white: eefecfdfgfeg
+correct: fg
+instruction: 白先。吃掉一个或多个黑棋。
+
+== 040 basic-principles-both_atari-12
+chapter: basic-principles
+kind: puzzle
+title: 双方打吃 · 12/12
+player: white
+black: efffbgcgdgfgahchfhaibi
+white: deafbfdfagegdhehcidi
+correct: bh
+instruction: 白先。吃掉一个或多个黑棋。
+
+== 041 basic-principles-find_escape-2
+chapter: basic-principles
+kind: puzzle
+title: 寻找逃跑 · 2/12
+player: black
+black: ecddeefg
+white: dccddedf
+correct: ed
+instruction: 黑先。解救处于打吃的棋串。
+
+== 042 basic-principles-find_escape-9
+chapter: basic-principles
+kind: puzzle
+title: 寻找逃跑 · 9/12
+player: black
+black: dfcgegfgch
+white: gcbfcfefdgdh
+correct: de
+instruction: 黑先。解救处于打吃的棋串。
+
+== 043 basic-principles-create_opening-5
+chapter: basic-principles
+kind: puzzle
+title: 创造开口 · 5/12
+player: white
+black: cccdbedebfdfcg
+white: ddceeeefdgdh
+correct: cf
+instruction: 白先。通过制造一个突破口来解救被打吃的棋串。
+
+== 044 basic-principles-connect-1
+chapter: basic-principles
+kind: puzzle
+title: 连接 · 1/6
+player: white
+black: dcddcfdf
+white: beceee
+mark: cross:de
+correct: de
+instruction: 棋子可以通过形成棋串来互相帮助。棋串比单颗棋子更难被吃。你可以通过连接你的棋子来形成棋串。连接白棋。
+
+== 045 basic-principles-cut-2
+chapter: basic-principles
+kind: puzzle
+title: 切断 · 2/6
+player: black
+black: dbcdddfehefg
+white: ecfcgceddedf
+correct: ee
+instruction: 黑先。切断白棋。
+
+== 046 basic-principles-bp-self-capture-4
+chapter: basic-principles
+kind: multipleChoice
+title: 自杀 · 4/12
+player: black
+black: fcedgdeegeefgffg
+white: fdff
+question: 白先。白棋能在A点落子吗？
+options: 是 / 否
+answer: 2
+instruction: 白先。白棋能在A点落子吗？
+
+== 047 basic-principles-bp-self-capture-12
+chapter: basic-principles
+kind: multipleChoice
+title: 自杀 · 12/12
+player: black
+black: dbdcedceeedfffeg
+white: ecddfddefecfgf
+question: 白先。白棋能在A点落子吗？
+options: 是 / 否
+answer: 1
+instruction: 白先。白棋能在A点落子吗？
+
+== 048 basic-principles-bp-ko-1
+chapter: basic-principles
+kind: multipleChoice
+title: 劫 · 1/6
+player: black
+black: ecfebfdfcgce
+white: cdgdbedecfcf
+question: 黑棋用1号棋子吃掉了标记为三角形的白棋。如果白棋提回后，棋盘局面与黑棋下1号棋子前完全相同，则此提回不被允许。白棋是否能立即提回1号棋子？
+options: 是 / 否
+answer: 2
+instruction: 黑棋用1号棋子吃掉了标记为三角形的白棋。如果白棋提回后，棋盘局面与黑棋下1号棋子前完全相同，则此提回不被允许。白棋是否能立即提回1号棋子？
+
+== 049 basic-principles-group-alive-3
+chapter: basic-principles
+kind: multipleChoice
+title: 活棋 · 3/6
+player: black
+black: ahbhchdidh
+white: agbibgcgdgeieheg
+question: 黑棋棋块是活棋吗？
+options: 是 / 否
+answer: 2
+instruction: 黑棋棋块是活棋吗？
+
+== 050 basic-principles-make-alive-5
+chapter: basic-principles
+kind: puzzle
+title: 两眼 · 5/6
+player: white
+black: agbgcgdgegehei
+white: bhchdhbidi
+correct: ah
+instruction: 白先。做出两只眼。
+
+== 051 basic-skills-atari-to-side-1
+chapter: basic-skills
+kind: puzzle
+title: 打吃至边 · 1/18
+player: black
+black: bdbf
+white: ccbe
+mark: A:ae
+mark: B:ce
+mark: triangle:be
+correct: ce
+instruction: 黑先。将带标记的白棋驱向棋盘边缘，可以更容易地吃掉它。选择落子点A或B，将带标记的白棋推向边缘。
+
+== 052 basic-skills-atari-to-stones-1
+chapter: basic-skills
+kind: puzzle
+title: 打吃棋子 · 1/6
+player: black
+black: deeegecffffg
+white: cdfdcefedfef
+mark: triangle:dfef
+correct: dg
+instruction: 黑先。将带标记的白棋驱向己方棋子，有助于吃掉这些棋子。对带标记的白棋进行打吃。
+
+== 053 basic-skills-atari-with-cut-13
+chapter: basic-skills
+kind: puzzle
+title: 打吃并切断 · 13/18
+player: black
+black: eefedfgfggchghdieifi
+white: cdcecfefffcgfgdhehfh
+correct: dg
+instruction: 黑先。阻止白棋连接，并吃掉一颗或多颗白棋。
+
+== 054 basic-skills-escape-possible-8
+chapter: basic-skills
+kind: multipleChoice
+title: 可逃跑 · 8/18
+player: black
+black: ccehfhdi
+white: ggeifi
+question: 白先。白棋能否救出被标记的棋串？
+options: 能 / 不能
+answer: 2
+instruction: 白先。白棋能否救出被标记的棋串？
+
+== 055 basic-skills-make-ko-8
+chapter: basic-skills
+kind: puzzle
+title: 制造劫 · 8/12
+player: white
+black: dfefffcggghgbhhhci
+white: ccgcdgegfgchehgh
+mark: 1:ci
+correct: di
+instruction: 白先。黑棋已下1。制造劫争。
+
+== 056 basic-skills-play_double_atari-15
+chapter: basic-skills
+kind: puzzle
+title: 下双打吃 · 15/18
+player: black
+black: efffgfeghgih
+white: dgfgggchehhh
+mark: triangle:hhggfg
+correct: gh
+instruction: 黑先。对带标记的白棋进行双打吃。
+
+== 057 basic-skills-connected-shape-6
+chapter: basic-skills
+kind: puzzle
+title: 连接形状 · 6/15
+player: white
+black: gcddgddegedfgf
+white: edfdfffggghg
+correct: ef | fe | ee
+instruction: 白先。确保黑棋无法再切断白棋。
+
+== 058 basic-skills-connect_with_hanging_connection-3
+chapter: basic-skills
+kind: puzzle
+title: 虎口连接 · 3/6
+player: white
+black: ddefdgfgfhgh
+white: feffgghhgi
+correct: hf
+instruction: 白先。用虎口连接白棋。
+
+== 059 basic-skills-ladder-16
+chapter: basic-skills
+kind: puzzle
+title: 征子 · 16/24
+player: white
+black: ecgdgeefff
+white: fedfgffg
+mark: triangle:ffef
+correct: eeegehdgcgdhdichbh | eeegehdgcgdhch
+instruction: 白先。用征子吃掉带标记的黑棋。
+
+== 060 basic-skills-shortage-liberties-10
+chapter: basic-skills
+kind: puzzle
+title: 气不够 · 10/12
+player: black
+black: edfdbecedegecfgfehfh
+white: eefeafbfdfffcgegbhdh
+mark: triangle:fffeee
+correct: fg
+instruction: 黑先。利用白棋气不够吃掉带标记的白棋。
+
+== 061 basic-skills-false-eye-17
+chapter: basic-skills
+kind: puzzle
+title: 假眼 · 17/18
+player: white
+black: cfffbgdgegfhfi
+white: ahchdhehbiei
+correct: bh
+instruction: 白先。阻止黑棋将白棋的眼做成假眼。
+
+== 062 basic-skills-large-eye-17
+chapter: basic-skills
+kind: puzzle
+title: 大眼 · 17/29
+player: white
+black: fdcedeeecfffgfbgcghgbhhh
+white: dfefdgfgggchghcidifigi
+correct: eh
+instruction: 白先。做成两个眼，使白棋块活棋。
+
+== 063 basic-skills-bs-group-alive-7
+chapter: basic-skills
+kind: multipleChoice
+title: 棋块活棋 · 7/12
+player: black
+black: ecgdafbfgfcgbhchbi
+white: ddbecedfagdgahdhai
+question: 黑棋的这个棋块活了吗？
+options: 能 / 不能
+answer: 2
+instruction: 黑棋的这个棋块活了吗？
+
+== 064 basic-skills-snapback-13
+chapter: basic-skills
+kind: puzzle
+title: 倒扑 · 13/25
+player: black
+black: gcbdcdcecfgfagcgggbhbi
+white: acbcccdcadbebfbgegchdh
+mark: triangle:bgbfbe
+correct: ae
+instruction: 黑先。吃掉被标记的棋子。
+
+== 065 basic-skills-net-6
+chapter: basic-skills
+kind: puzzle
+title: 罩 · 6/13
+player: white
+black: gcbddfegfggg
+white: feefffcgdg
+mark: triangle:df
+correct: cededd
+instruction: 白先。用罩的方式吃掉被标记的棋子。
+
+== 066 basic-skills-count-territory-12
+chapter: basic-skills
+kind: multipleChoice
+title: 领地 · 12/12
+player: black
+black: bbdcechcbdcdeegecfdfffggfhgh
+white: aebebfefagbgcgdgfgdhehbidi
+question: 白棋的地盘有多少目？注意：一个死子算两目。
+options: 5 / 6 / 7
+answer: 2
+instruction: 白棋的地盘有多少目？注意：一个死子算两目。
+
+== 067 basic-skills-close_territory-6
+chapter: basic-skills
+kind: puzzle
+title: 封锁领地 · 6/12
+player: black
+black: afbfcfdfbhdhehei
+white: aebecedeeeefegggfhfi
+correct: dg
+instruction: 黑先。通过一手棋封闭黑棋领地。
+
+== 068 basic-skills-capturing_race-1
+chapter: basic-skills
+kind: puzzle
+title: 对杀 · 1/18
+player: white
+black: hcgdgehfhg
+white: hdhegfgghh
+mark: triangle:hghfhehd
+correct: igieif | ifidig
+instruction: 被标记的两个棋串都有两口气。白棋可以通过减少黑棋串的气来吃掉它。如果轮到黑棋走，黑棋也可以做同样的事情。这被称为'对杀'。如果双方气数相同，先落子的一方将赢得对杀。白先。赢得对杀。
+
+== 069 basic-skills-correct-side-2
+chapter: basic-skills
+kind: puzzle
+title: 正确方向 · 2/24
+player: black
+black: dfefcgfgfh
+white: ffgfeggggh
+correct: eh
+instruction: 黑先。通过正确方向的打吃来吃掉白棋串。
+
+== 070 basic-skills-correct-side-20
+chapter: basic-skills
+kind: puzzle
+title: 正确方向 · 20/24
+player: white
+black: ddefbgcgdgahdhbi
+white: feafbfcfdfgfagegggehgh
+correct: ee
+instruction: 白先。通过正确方向的打吃来吃掉黑棋串。
+
+== 071 basic-skills-capture-15
+chapter: basic-skills
+kind: puzzle
+title: 提子 · 15/21
+player: black
+black: cdcfdfbgegbhehei
+white: eeheefcgdgfgchfhfi
+correct: ci
+instruction: 黑先。在不使自己处于打吃状态的情况下吃掉白棋。
+
+== 072 basic-skills-bs-escape-12
+chapter: basic-skills
+kind: puzzle
+title: 逃跑 · 12/12
+player: white
+black: dbebccfcedde
+white: fbdcecgcge
+mark: A:dd
+mark: B:fd
+mark: triangle:ecdc
+correct: fd
+instruction: 白先。选择落子于A或B点，使被标记的棋子逃脱？
+
+== 073 basic-skills-bs-liberties-19
+chapter: basic-skills
+kind: puzzle
+title: 气数 · 19/22
+player: white
+black: dfefgfcgfgchdhfhci
+white: becfbgdgegbhehei
+mark: 1:dh
+correct: bi
+instruction: 白先。黑棋用第1手填塞了自己的气。惩罚这一着。
+
+== 074 basic-skills-first-line-6
+chapter: basic-skills
+kind: puzzle
+title: 一路 · 6/12
+player: black
+black: afagahchaibi
+white: bebfbgbhhhcidi
+mark: triangle:dici
+correct: dheifh
+instruction: 黑先。提掉第一线被标记的棋子。
+
+== 075 beginner-level1-bl1-atari-1
+chapter: beginner-level1
+kind: puzzle
+title: 打吃 · 1/24
+player: white
+black: hfdgegfghgchghhh
+white: dfefffgfcgggfh
+mark: triangle:dgegfg
+correct: dh
+instruction: 你可以吃掉被标记的黑棋棋子，但你需要正确开始，在正确的一侧打吃。在落子前，试着计算后续着法。白先。吃掉被标记的黑棋棋子。
+
+== 076 beginner-level1-escape-from-net-1
+chapter: beginner-level1
+kind: puzzle
+title: 逃脱罗网 · 1/24
+player: white
+black: cbbdceeebfcgdgeg
+white: cfdfbgfgggbhcheh
+mark: 1:ee
+mark: square:dfcf
+mark: A:ef
+mark: B:de
+correct: ef
+instruction: 白先。黑棋意图用1号着法通过罩吃掉被标记的棋子。白棋可以尝试在A或B点落子逃跑。在这种情况下，其中一点是成功的。从这个罩中逃脱。
+
+== 077 beginner-level1-bl1-calculate-escape-1
+chapter: beginner-level1
+kind: multipleChoice
+title: 计算逃脱 · 1/24
+player: black
+black: deeecfffcgfg
+white: cdcebfdfef
+question: 白先。标记的棋子能逃跑吗？
+options: 能 / 不能
+answer: 2
+instruction: 白先。标记的棋子能逃跑吗？
+
+== 078 beginner-level1-bl1-calculate-ladder-2
+chapter: beginner-level1
+kind: puzzle
+title: 征子 · 2/8
+player: black
+black: edfeffeg
+white: eeefcg
+mark: triangle:eeef
+mark: A:de
+mark: B:df
+correct: df
+instruction: 有时你可以通过从正确的一侧开始来避免征子不利。黑棋可以选择在A或B点落子。通过选择正确的一侧，用征子吃掉被标记的棋子。
+
+== 079 beginner-level1-bl1-double-atari-6
+chapter: beginner-level1
+kind: puzzle
+title: 双打吃 · 6/12
+player: white
+black: bcccecbdcedfbgdgch
+white: cdddfddeefegdheh
+correct: cf
+instruction: 白先。下出一步好的双打吃。
+
+== 080 beginner-level1-bl1-net-7
+chapter: beginner-level1
+kind: puzzle
+title: 罩 · 7/24
+player: black
+black: decfgfdgeg
+white: fcdfefgghg
+mark: triangle:efdf
+correct: fe
+instruction: 黑先。用罩吃掉被标记的棋子。
+
+== 081 beginner-level1-bl1-chase-down-8
+chapter: beginner-level1
+kind: puzzle
+title: 追击 · 8/13
+player: black
+black: deeecfefcgch
+white: ecddgdbecedfgfdgeg
+correct: fgehfh
+instruction: 黑先。通过追击吃掉棋子。
+
+== 082 beginner-level1-bl1-capture1-19
+chapter: beginner-level1
+kind: puzzle
+title: 提子1 · 19/24
+player: black
+black: abbbcbdbacbdcd
+white: bcccdcecadaeeedfcgbh
+mark: triangle:adae
+correct: bf
+instruction: 黑先。吃掉被标记的棋子。
+
+== 083 beginner-level1-bl1-capture2-20
+chapter: beginner-level1
+kind: puzzle
+title: 提子2 · 20/24
+player: white
+black: gddeeebfefbgcgdgehdi
+white: cdedbececfdfegfgfh
+correct: fe
+instruction: 白先。吃掉一或多颗黑棋棋子。
+
+== 084 beginner-level1-bl1-capture3-20
+chapter: beginner-level1
+kind: puzzle
+title: 提子3 · 20/24
+player: white
+black: ccbdddcebfdfdgch
+white: deeeefegbhdh
+correct: cg
+instruction: 白先。吃掉一或多颗黑棋棋子。
+
+== 085 beginner-level1-bl1-capture4-21
+chapter: beginner-level1
+kind: puzzle
+title: 提子4 · 21/24
+player: black
+black: dcbdcdedbecfcgeg
+white: ecfcddgdcedebfdfgfgg
+correct: eeefff
+instruction: 黑先。吃掉一或多颗白棋棋子。
+
+== 086 beginner-level1-bl1-connect-21
+chapter: beginner-level1
+kind: puzzle
+title: 连接 · 21/24
+player: black
+black: cfcgfgcheh
+white: cededfdgdh
+mark: triangle:ehchfgcgcf
+correct: di
+instruction: 黑先。连接被标记的棋子。
+
+== 087 beginner-level1-bl1-cut-22
+chapter: beginner-level1
+kind: puzzle
+title: 切断 · 22/24
+player: white
+black: becedfefgfegdh
+white: bccdedbfcfcgdgbh
+mark: triangle:dheggfefdfcebe
+correct: de
+instruction: 白先。切断被标记的棋子。
+
+== 088 beginner-level1-bl1-eye-13
+chapter: beginner-level1
+kind: multipleChoice
+title: 眼 · 13/14
+player: black
+black: deeecfefcgdgbhdhehci
+white: dccdfdcefebfffegfgfh
+question: A是真眼还是假眼？
+options: 真眼 / 假眼
+answer: 2
+instruction: A是真眼还是假眼？
+
+== 089 beginner-level1-bl1-count-eyes-11
+chapter: beginner-level1
+kind: multipleChoice
+title: 数眼 · 11/12
+player: black
+black: bdcdddedfdbegegfbgfgbhchghdi
+white: cedeeecfefffcgdgehfh
+question: 白棋棋块有几个真眼？
+options: 0 / 1 / 2
+answer: 2
+instruction: 白棋棋块有几个真眼？
+
+== 090 beginner-level1-bl1-capturing-race-1-5
+chapter: beginner-level1
+kind: puzzle
+title: 对杀 · 5/24
+player: white
+black: adbdcdbededfcgegbh
+white: bbccdcddceafbfcf
+mark: triangle:adbdcdbeceafbfcf
+correct: acbgbc | bcbgac
+instruction: 白先。请赢得标记棋块之间的对杀。
+
+== 091 beginner-level1-bl1-capturing-race-2-7
+chapter: beginner-level1
+kind: puzzle
+title: 对杀 · 7/13
+player: white
+black: heefffgfdgeghgigahbhchghfi
+white: ceeefedfagbgcgfgggdhehfh
+correct: hh
+instruction: 白先。请攻击正确的棋串并赢得对杀。
+
+== 092 beginner-level1-bl1-seki-2-5
+chapter: beginner-level1
+kind: puzzle
+title: 制造双活 · 5/13
+player: black
+black: dddecfefffcgfgbhfhbifi
+white: eefegedfgfdgggchdhehghcigi
+mark: triangle:effffgfhfi
+correct: ei
+instruction: 黑先。请下成双活并救出标记的棋子。
+
+== 093 beginner-level1-bl1-life-death-2-8
+chapter: beginner-level1
+kind: puzzle
+title: 生死 · 8/12
+player: white
+black: igghihgihi
+white: ffgfhfiffgfhfi
+correct: hg
+instruction: 白先。请阻止黑棋做出第二个眼，并吃掉黑棋块。
+
+== 094 beginner-level1-bl1-life-death-4-10
+chapter: beginner-level1
+kind: puzzle
+title: 生死 · 10/13
+player: white
+black: eefehebfcfdfgfbgggbhghfigi
+white: efffcgdgfgchfhci
+correct: eh
+instruction: 白先。请先做成一只眼，使白棋块活棋。
+
+== 095 beginner-level1-bl1-life-death-6-10
+chapter: beginner-level1
+kind: puzzle
+title: 生死 · 10/12
+player: black
+black: bcccadcdcedeeeefcgdgfgdh
+white: bdbeafcfdfagbgchbici
+correct: ah
+instruction: 黑先。请吃掉白棋块。
+
+== 096 beginner-level1-bl1-serial-atari-10
+chapter: beginner-level1
+kind: puzzle
+title: 连续打吃 · 10/24
+player: white
+black: eedfffhfagbgdgeggghgbhchaici
+white: gecfgfcgfgdhehfh
+mark: triangle:dfdgeg
+correct: deefed
+instruction: 白先。请打吃并吃掉标记的棋子。
+
+== 097 beginner-level1-bl1-ko-11
+chapter: beginner-level1
+kind: puzzle
+title: 劫 · 11/24
+player: white
+black: bdcdcecfcgegdhci
+white: bebfbgahch
+correct: bi
+instruction: 白先。请制造一个劫。
+
+== 098 beginner-level1-bl1-block-2
+chapter: beginner-level1
+kind: puzzle
+title: 挡 · 2/13
+player: black
+black: cbddcecg
+white: dedfdggg
+mark: 1:df
+correct: cf
+instruction: 黑先。白棋已落子1。挡住白棋。
+
+== 099 beginner-level2-bl2-seki-1
+chapter: beginner-level2
+kind: puzzle
+title: 双活 · 1/13
+player: white
+black: aeafagbebgcfcgchci
+white: adahbdcedddfdgdhdi
+mark: A:bi
+mark: B:bh
+correct: bi
+instruction: 黑棋有两只眼和6目（5目领地加1个提子）。然而，白棋可以通过在A点落子形成双活来取消这些目数。黑棋无法吃掉角上的两颗白子：如果黑棋在B点应，会让自己的棋子陷入打吃。白先，形成双活。
+
+== 100 beginner-level2-bl2-chase-down-11
+chapter: beginner-level2
+kind: puzzle
+title: 追杀 · 11/12
+player: black
+black: bbcbdbebfbbccddddebfcfdf
+white: ccdcecadbdedbeceafffbgcgdgfg
+mark: triangle:adbdbece
+correct: ac
+instruction: 黑先。追击标记的棋子。
+
+== 101 beginner-level2-bl2-net-9
+chapter: beginner-level2
+kind: puzzle
+title: 罩 · 9/12
+player: white
+black: hebfefbgcgdghgchehdi
+white: cdbecfdfegfgfh
+correct: feeeeddece
+instruction: 白先。用罩尽可能多地吃子。
+
+== 102 beginner-level2-bl2-capture-2-7
+chapter: beginner-level2
+kind: puzzle
+title: 提子 2 · 7/24
+player: black
+black: bcccdcedbeeecfefdgdh
+white: bdcddddebfdfcgegbheh
+correct: ad
+instruction: 黑先。尽可能多地吃子。
+
+== 103 beginner-level2-bl2-throw-in-2-4
+chapter: beginner-level2
+kind: puzzle
+title: 扑 2 · 4/24
+player: white
+black: bgdgbhdhfhci
+white: ccafbfcfagcgch
+correct: biaiah
+instruction: 白先。用扑吃子。
+
+== 104 beginner-level2-bl2-connect-5
+chapter: beginner-level2
+kind: puzzle
+title: 连接 · 5/11
+player: white
+black: cccdbece
+white: adbdbfcfdfeg
+correct: ae
+instruction: 白先。连接白棋。选择最佳连接方式。
+
+== 105 beginner-level2-bl2-corner-1-4
+chapter: beginner-level2
+kind: puzzle
+title: 角部 1 · 4/12
+player: black
+black: df
+white: 
+mark: A:cd
+mark: B:ed
+mark: C:gd
+correct: cd
+instruction: 黑先。选择最佳角部封锁（缔角），A、B或C。
+
+== 106 beginner-level2-bl2-defense-2-2
+chapter: beginner-level2
+kind: puzzle
+title: 防守 2 · 2/12
+player: white
+black: df
+white: cfeg
+mark: 1:df
+correct: dg
+instruction: 白先。黑棋走了1。防守白棋的领地。
+
+== 107 beginner-level2-bl2-eye1-5
+chapter: beginner-level2
+kind: puzzle
+title: 眼1 · 5/13
+player: white
+black: decfefcgegchdhehciei
+white: dccdedceeefebfffbgfgbhfh
+correct: df
+instruction: 白先。通过扑入制造假眼。
+
+== 108 beginner-level2-bl2-endgame1-2
+chapter: beginner-level2
+kind: puzzle
+title: 收官1 · 2/13
+player: black
+black: acbcccddbededfcgegehei
+white: abbbcbdcecedeeefffdgfgdhfh
+mark: 1:ef
+correct: ch | di | ci
+instruction: 黑先。白棋已下第1手。防守黑棋的弱点。
+
+== 109 beginner-level2-bl2-endgame3-10
+chapter: beginner-level2
+kind: multipleChoice
+title: 收官3 · 10/24
+player: black
+black: gbgcadbdcdgdcefegehecfdfefffbgcg
+white: aebeafgfhfdgegfgahbhchhh
+question: 下在A点的价值是多少？
+options: 4 / 7 / 8
+answer: 2
+instruction: 下在A点的价值是多少？
+
+== 110 beginner-level2-bl2-life-death-1-2
+chapter: beginner-level2
+kind: puzzle
+title: 死活 · 2/13
+player: white
+black: bdbfcfdfffegehdiei
+white: bgcgdgbhdhbi
+correct: ciagah
+instruction: 白先。按正确的顺序做出两只眼。
+
+== 111 beginner-level2-bl2-life-death-3-11
+chapter: beginner-level2
+kind: puzzle
+title: 死活 · 11/19
+player: white
+black: aebeceafdfefagegchehei
+white: bfbgdgahbhdh
+correct: cicfcg
+instruction: 白先。阻止形成3点眼位，使白棋的棋块活棋。
+
+== 112 beginner-level2-bl2-life-death-5-2
+chapter: beginner-level2
+kind: puzzle
+title: 死活 · 2/24
+player: black
+black: bcccadddedeeefegbhchdh
+white: bdcdcedeafbfdfcgdg
+correct: ae
+instruction: 黑先。吃掉白棋的棋块。
+
+== 113 beginner-level2-bl2-life-death-6-12
+chapter: beginner-level2
+kind: puzzle
+title: 死活 · 12/24
+player: black
+black: bdaebfcfdgegfgahbhfh
+white: afagbgcgchdhehbi
+correct: eiaidi
+instruction: 黑先。吃掉白棋的棋块。
+
+== 114 beginner-level2-bl2-ko-3-3
+chapter: beginner-level2
+kind: puzzle
+title: 劫 · 3/12
+player: black
+black: cedfagbgcgdhehei
+white: dgegfgahbhchfhbi
+mark: triangle:ahbhchbi
+correct: ci
+instruction: 黑先。尝试用劫争吃掉标记的棋子。
+
+== 115 beginner-level2-bl2-haengma-2-8
+chapter: beginner-level2
+kind: puzzle
+title: 行棋步法 · 8/10
+player: white
+black: cddfcg
+white: dg
+mark: 1:cg
+correct: eg
+instruction: 白先。对黑1的弯曲，下出好的应手（延伸）。
+
+== 116 beginner-level2-bl2-haengma-5-13
+chapter: beginner-level2
+kind: puzzle
+title: 行棋步法 · 13/24
+player: black
+black: dedg
+white: cfef
+mark: A:ce
+mark: B:df
+mark: C:cg
+mark: triangle:ef
+correct: df
+instruction: 黑先。针对白棋标记的着法，选择最佳防守：A、B或C？
+
+== 117 beginner-level2-bl2-shape-2-6
+chapter: beginner-level2
+kind: multipleChoice
+title: 棋形 · 6/14
+player: black
+black: dccdcecfdfcg
+white: ccdddeefdg
+question: 白棋的棋块是强形还是弱形？
+options: 强形 / 弱形
+answer: 2
+instruction: 白棋的棋块是强形还是弱形？
+
+== 118 beginner-level2-bl2-capturing-race-2-13
+chapter: beginner-level2
+kind: puzzle
+title: 对杀 · 13/15
+player: black
+black: dcbdbedeeeefagdgchdhehbiciei
+white: geafbfcfdfcgegfgbhfhfi
+correct: ahbgaeaiah | ahbgceaiah
+instruction: 黑先。以有眼对无眼，赢得对杀。
+
+== 119 beginner-level3-bl3-capture-1-1
+chapter: beginner-level3
+kind: puzzle
+title: 提子 · 1/12
+player: white
+black: dceccdcedfffdg
+white: cbccbdddde
+correct: cfbebf
+instruction: 白先。尽可能多吃掉棋子。
+
+== 120 beginner-level3-bl3-capture-4-6
+chapter: beginner-level3
+kind: puzzle
+title: 提子 · 6/24
+player: black
+black: becebfdfdgbhdhghbigi
+white: deeecfcgchehcidi
+correct: eifibgeieg
+instruction: 黑先。尽可能多吃掉棋子。
+
+== 121 beginner-level3-bl3-capture-7-12
+chapter: beginner-level3
+kind: puzzle
+title: 提子 · 12/18
+player: white
+black: efdfcfahaibichdheififhfgcdfebdddbb
+white: egehagbgbfbebhcgdgce
+correct: di
+instruction: 白先。在倒扑中尽可能多吃掉棋子。
+
+== 122 beginner-level3-bl3-joseki-4-3
+chapter: beginner-level3
+kind: puzzle
+title: 定式 · 3/12
+player: white
+black: dfeghg
+white: bfcgdg
+mark: 1:hg
+mark: A:bd
+mark: B:ef
+mark: C:eh
+correct: ef
+instruction: 白先。在黑棋1之后，选择最佳着法：A、B或C。
+
+== 123 beginner-level3-bl3-haengma-1-18
+chapter: beginner-level3
+kind: puzzle
+title: 行棋方向 · 18/19
+player: white
+black: de
+white: dg
+mark: 1:de
+mark: A:ef
+mark: B:ff
+correct: ff
+instruction: 白先。在黑棋1之后选择最佳后续着法，A或B。
+
+== 124 beginner-level3-bl3-seki-2-1
+chapter: beginner-level3
+kind: puzzle
+title: 双活 · 1/8
+player: white
+black: bgbhcfcgcidfegfgfhfi
+white: chdgdhefffgfgggh
+mark: A:bi
+mark: B:di
+mark: C:ei
+correct: eibigi
+instruction: 如果你想赢得对杀，你必须阻止对手制造双活。所以如果有可能形成双活，你应该小心应对。如果白棋在B位落子，黑棋可以在A位制造双活。为防止这种情况发生，白棋应在C位落子。白先。阻止双活并赢得对杀。
+
+== 125 beginner-level3-bl3-skills-3-12
+chapter: beginner-level3
+kind: multipleChoice
+title: 技巧 · 12/14
+player: black
+black: ccecedcedecf
+white: fdgdeedfcgdh
+question: 白先。黑棋1之后，在A点落子是否是好的回应，还是脱先更好？
+options: 好的回应 / 脱先
+answer: 1
+instruction: 白先。黑棋1之后，在A点落子是否是好的回应，还是脱先更好？
+
+== 126 beginner-level3-bl3-skills-7-2
+chapter: beginner-level3
+kind: multipleChoice
+title: 技巧 · 2/12
+player: black
+black: bccccdbecfdfcgegdheh
+white: bdcedeeegeeffgfh
+question: 黑先。在A点落子能加强黑棋棋块吗，还是脱先更好？
+options: 加强 / 脱先
+answer: 2
+instruction: 黑先。在A点落子能加强黑棋棋块吗，还是脱先更好？
+
+== 127 beginner-level3-bl3-endgame-4-5
+chapter: beginner-level3
+kind: puzzle
+title: 收官 · 5/12
+player: black
+black: bbccdcecgcadbdfddeeegeafbfgfggehghfigi
+white: cdddbecefecfdfefffagbgcgfgahchfhbicidi
+mark: A:ed
+mark: B:ae
+mark: C:ei
+correct: ei
+instruction: 黑先。选择最大的着法，A、B或C。
+
+== 128 beginner-level3-bl3-false-eye-3-6
+chapter: beginner-level3
+kind: puzzle
+title: 假眼 · 6/13
+player: white
+black: agbgcgbhdhehfhbi
+white: bdbfcfgfdgegfgghfigi
+correct: di
+instruction: 白先。利用气的不足来制造一个假眼。
+
+== 129 beginner-level3-bl3-life-death-3-7
+chapter: beginner-level3
+kind: puzzle
+title: 死活 · 7/13
+player: white
+black: adbdcdcedefeefagdgfghgdhcidi
+white: aebebfcfdfcgegbhch
+correct: biehah
+instruction: 白先。通过下先手来使棋块活棋。
+
+== 130 beginner-level3-bl3-life-death-8-2
+chapter: beginner-level3
+kind: puzzle
+title: 死活 · 2/12
+player: black
+black: agcichcgcfbf
+white: ahafaebecedfdgdhee
+correct: bh
+instruction: 黑先。利用劫让黑棋棋块活棋。
+
+== 131 beginner-level3-bl3-life-death-12-7
+chapter: beginner-level3
+kind: puzzle
+title: 死活 · 7/12
+player: black
+black: ccbdcdaiahagafaeaddcedfdfifhfgegdggf
+white: dedddfcidhehbhbgbfcgbece
+correct: ei
+instruction: 黑先。吃掉白棋棋块；利用假眼。
+
+== 132 beginner-level3-bl3-life-death-14-24
+chapter: beginner-level3
+kind: puzzle
+title: 死活 · 24/24
+player: black
+black: adbdcedfdgdhfhdd
+white: bichcgbgcfafbe
+correct: ahaeag
+instruction: 黑先。吃掉白棋棋块。
+
+== 133 beginner-level3-bl3-life-death-17-5
+chapter: beginner-level3
+kind: multipleChoice
+title: 死活 · 5/20
+player: black
+black: dgdfdechcibicdbccb
+white: bhbgafbebdcf
+question: 白棋棋块的状态是什么？死棋、活棋，还是取决于谁先落子？
+options: 活棋 / 死棋 / 取决于谁先落子
+answer: 1
+instruction: 白棋棋块的状态是什么？死棋、活棋，还是取决于谁先落子？
+
+== 134 beginner-level3-bl3-capturing-race-2-4
+chapter: beginner-level3
+kind: puzzle
+title: 对杀 · 4/13
+player: black
+black: cgdfegcfaf
+white: dgdhefffgghg
+correct: eh
+instruction: 黑先。通过增加气数或防止损失气数来赢得对杀。
+
+== 135 beginner-level3-bl3-capturing-race-6-8
+chapter: beginner-level3
+kind: puzzle
+title: 对杀 · 8/24
+player: black
+black: cfcedeeefegighgggfgdccdg
+white: cgchbfbebgdfeffffgfhfibd
+correct: eh
+instruction: 黑先。赢得对杀。
+
+== 136 beginner-level3-bl3-capturing-race-8-12
+chapter: beginner-level3
+kind: puzzle
+title: 对杀 · 12/12
+player: black
+black: agafbecedeefegeh
+white: aeadbcbfcfdfeeeddbfffgfhgdchhh
+correct: cgdgdh
+instruction: 黑先。赢得对杀。
+
+== 137 beginner-level3-bl3-preparatory-atari-4-21
+chapter: beginner-level3
+kind: puzzle
+title: 准备打吃 · 21/24
+player: white
+black: afbececfdfegfhgh
+white: aebdaccddeeffggghgfedd
+correct: dgehcgbfbg | dgehcgbfag
+instruction: 白先。经过准备性打吃后提子。
+
+== 138 beginner-level3-bl3-connect-cut-4-6
+chapter: beginner-level3
+kind: puzzle
+title: 连接与切断 · 6/12
+player: black
+black: chcgcfdhbecd
+white: ehdgegghdfdecebdfd
+mark: 1:bd
+correct: bc
+instruction: 黑先。应对这个切断。
+
+== 139 beginner-level4-bl4-joseki-1-1
+chapter: beginner-level4
+kind: puzzle
+title: 定式 · 1/16
+player: white
+black: cfgg
+white: eg
+mark: 1:eg
+mark: 2:gg
+mark: 3:bg
+mark: 4:cg
+mark: 5:bf
+mark: 6:ce
+mark: 7:ch
+mark: 8:dh
+mark: 9:bh
+mark: 10:dg
+mark: 11:bd
+correct: bgcgbfcechdhbhdgbd
+instruction: 白棋在1下挂，黑棋在2下夹。白棋可以跳向中腹或在3跳入角部。在这个定式中，黑棋将白棋的1和3分断。用白棋下这个定式，从3开始。
+
+== 140 beginner-level4-bl4-joseki-2-12
+chapter: beginner-level4
+kind: puzzle
+title: 定式 · 12/18
+player: black
+black: cfef
+white: dgeg
+mark: 1:dg
+mark: A:df
+mark: B:cg
+mark: C:fg
+correct: cg | df
+instruction: 黑先。选择白棋1之后A、B或C中最佳的应答。
+
+== 141 beginner-level4-bl4-skills-2-9
+chapter: beginner-level4
+kind: puzzle
+title: 技巧 · 9/16
+player: black
+black: ddedgdbichcgcfbebdcd
+white: gghfffbhbgbfaeadbcccdcdacededfeg
+correct: afagah
+instruction: 黑先。下劫争以获利。
+
+== 142 beginner-level4-bl4-capture-1-3
+chapter: beginner-level4
+kind: puzzle
+title: 手筋 · 3/22
+player: white
+black: chcgdfdeeg
+white: dgdhcfefeeed
+correct: cedddc
+instruction: 白先。尽可能多地吃掉黑棋。
+
+== 143 beginner-level4-bl4-capture-2-8
+chapter: beginner-level4
+kind: puzzle
+title: 手筋 · 8/20
+player: black
+black: bibhbgbfbecedddcdfefffdbfa
+white: dgcfcgchfgggdeeefdcdbdcbhccaif
+correct: egehdhdicidhfh
+instruction: 黑先。尽可能多地提掉白棋棋子。
+
+== 144 beginner-level4-bl4-capture-3-16
+chapter: beginner-level4
+kind: puzzle
+title: 手筋 · 16/20
+player: white
+black: ehfhhgdgdfcfbecdadiedbbb
+white: afbfbgbhahdhcgciegefeeaegd
+correct: cededdceccbdbc
+instruction: 白先。尽可能多地吃掉黑棋。
+
+== 145 beginner-level4-bl4-connect-1-8
+chapter: beginner-level4
+kind: puzzle
+title: 手筋 · 8/14
+player: black
+black: dgegfghfcfbfbcccdcddfb
+white: bgcgdhehdfdecdbdedeegdic
+correct: aeadce
+instruction: 黑先。走出最佳连接。
+
+== 146 beginner-level4-bl4-connect-3-7
+chapter: beginner-level4
+kind: puzzle
+title: 手筋 · 7/24
+player: white
+black: afbfcgchcdbb
+white: aiahagegeheieehg
+correct: ci
+instruction: 白先。走出最佳连接。
+
+== 147 beginner-level4-bl4-connect-4-11
+chapter: beginner-level4
+kind: puzzle
+title: 手筋 · 11/16
+player: black
+black: egdgcgbgbccdedecccda
+white: fhfgfffedfcebfbebdgc
+correct: deeeddefcf
+instruction: 黑先。走出最佳连接。
+
+== 148 beginner-level4-bl4-cut-2-3
+chapter: beginner-level4
+kind: puzzle
+title: 手筋 · 3/14
+player: white
+black: cgchbidheighgggdff
+white: ahbhbgbfcfdgegfgdecc
+correct: fifhehgidiciai
+instruction: 白先。切断黑棋棋子。
+
+== 149 beginner-level4-bl4-capturing-race-1-16
+chapter: beginner-level4
+kind: puzzle
+title: 对杀 · 16/23
+player: white
+black: hhhghfgehdfgffefdfdhchcggi
+white: bhbgcfdebeeefegfggghfh
+correct: dgegeh | ehdgeidibi
+instruction: 白先。赢得对杀。
+
+== 150 beginner-level4-bl4-capturing-race-3-1
+chapter: beginner-level4
+kind: puzzle
+title: 对杀 · 1/20
+player: white
+black: ahagbfdhehegfgghdfdebd
+white: bgcgdgchhhggffefhffd
+correct: di
+instruction: 白先。赢得对杀。
+
+== 151 beginner-level4-bl4-capturing-race-4-9
+chapter: beginner-level4
+kind: puzzle
+title: 对杀 · 9/20
+player: black
+black: ahagafbfcfdgegeh
+white: aibhbgcgdhcebeaedfefffghhfddac
+correct: cibidi
+instruction: 黑先。赢得对杀。
+
+== 152 beginner-level4-bl4-capturing-race-5-17
+chapter: beginner-level4
+kind: puzzle
+title: 对杀 · 17/20
+player: white
+black: cgbgdfbecddhehfhggdcdbhf
+white: ahbhchdeefdgegedge
+correct: bfcfceafagbfbd
+instruction: 白先。赢得对杀。
+
+== 153 beginner-level4-bl4-capturing-race-7-5
+chapter: beginner-level4
+kind: puzzle
+title: 对杀 · 5/20
+player: white
+black: dfcfcgchehfighbebdcdgggfgdcb
+white: bibhbgbfcedeeeeffgfhecfb
+correct: dhegci
+instruction: 白先。赢得对杀。
+
+== 154 beginner-level4-bl4-capturing-race-8-13
+chapter: beginner-level4
+kind: puzzle
+title: 对杀 · 13/20
+player: black
+black: bibhbgcfdfeffggghhgihfed
+white: bfbeceghfhegdgcgchcidieicc
+correct: ehdhhi
+instruction: 黑先。赢得对杀。

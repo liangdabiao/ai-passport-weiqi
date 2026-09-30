@@ -2,78 +2,78 @@
   <a href="README.zh_CN.md">简体中文</a> · <strong>English</strong>
 </p>
 
-# Qiaopi Quiz — fill in the blank on a three-key handheld
+# Weiqi Quest — the Go ladder on a three-key handheld
 
-An offline game for a three-button handheld: **each round asks 20 questions**, and every question is
-a line taken from a real *qiaopi* letter with one phrase blanked out — pick the missing phrase from
-four candidates. All 91 questions, their narration and the background music live inside the device:
-**no network, no card, no phone**.
+An offline Go (weiqi) puzzle ladder for a three-button handheld: **154 levels across 7 chapters**,
+from the first liberty to capturing races, endgame procedure and ko fights. Every board, every
+solution path and every quiz question lives inside the device: **no network, no card, no phone**.
 
-*Qiaopi* are the letters and remittances that overseas Chinese sent home from Southeast Asia in the
-19th and 20th centuries. The questions are drawn from the letters themselves and the answer page
-names the sender and the year — so this is not a word bank to guess at, it is 91 pieces of history
-you can actually read.
+The levels are adapted from the web game *Go Quest Ladder*, which was itself extracted
+from the LearningHub tutorial on online-go.com — a fork of that game supplied the level data, and
+the on-device version keeps its chapter ladder and star ratings.
 
-| Title | Question | Answer | Summary |
+| Title | World map | Playing | Result |
 | --- | --- | --- | --- |
-| ![Title page: start a round, volume, reset record](assets/images/qiaopi/qiaopi-title.png) | ![Question page: one blanked line and four candidates](assets/images/qiaopi/qiaopi-ask.png) | ![Answer page: right or wrong, explanation, full text, source](assets/images/qiaopi/qiaopi-reveal.png) | ![Summary page: rank, four figures, comment](assets/images/qiaopi/qiaopi-summary.png) |
-| A large title, three entries and one line of progress. | Category and question number on top, one blanked line of a letter, four candidates below. | Right or wrong, the answer, the explanation, the full text and the source — taller than a screen, so it turns. | A rank and a comment, plus correct answers, best streak, time and score. |
+| A large title, three entries — Continue, Volume, Reset record — and a progress line. | Seven chapters from Bronze to King, each with its cleared count. | A 9x9 board with a gold cursor; instructions and candidates above it. | Stars, points and the mistake count; "next level" one press away. |
 
-The four screens above are drawn from the layout parameters in the source; they are not device
-photographs. See [`assets/README.md`](assets/README.md) for how they are generated.
-
-## How a round goes
+## How a run goes
 
 | Page | What is on screen | The three keys |
 | --- | --- | --- |
-| **Title** | A large title, three entries — Start a round, Volume, Reset record — and a line of progress such as "seen 12/91 · best 240" | UP/DOWN to choose, OK to enter. On Volume, OK cycles six steps (off, then 20% up to 100%). Reset record takes **two presses of OK** |
-| **Question** | The category and question number in the top bar (question 1 of 20), one blanked-out line of a letter, and four candidates below it | UP/DOWN to move between the four candidates, OK to answer |
-| **Answer** | Right or wrong, the correct answer, an explanation, the full original text and the source; the spoken reading of the correct line plays only **after** you have answered | UP/DOWN to turn through the page line by line (it is taller than the screen), OK for the next question or the score |
-| **Summary** | A rank and a comment, plus correct answers out of 20, best streak, time taken and score | OK to play again, a long press on OK to return to the title |
+| **Title** | A large title, three entries — Continue, Volume, Reset record — and a line such as "cleared 12/154 · ★30" | UP/DOWN to choose, OK to enter. On Volume, OK cycles six steps (off, then 20% up to 100%). Reset record takes **two presses of OK** |
+| **World map** | Seven chapters, locked ones greyed out; the selected chapter shows its progress in the hint bar | UP/DOWN to choose, OK to enter a chapter, long-press OK to return |
+| **Level list** | Five rows per screen: number, level title, stars earned; locked levels are greyed out with a lock mark | UP/DOWN to move, OK to enter an unlocked level, long-press OK to return to the map |
+| **Brief** | The level's instruction (scrollable), or the board plus question for quiz levels | UP/DOWN to scroll, OK to start, long-press OK to return |
+| **Playing** | A 9x9 board, a gold cursor, a status line | Short UP/DOWN move a row, long UP/DOWN move a column, OK places (or confirms / removes dead stones), long-OK goes back to the brief |
+| **Result** | Three stars at best, points (100 per star), mistakes | OK for the next level, long-OK back to the list |
 
-Every page spells out in its bottom bar what the three keys do right now — three keys have to cover
-the whole game, so their meaning should never have to be guessed.
+Judging matches the web game: a move must extend one of the level's scripted solution paths; a
+legal move that fits no path costs one mistake and resets the board. Zero mistakes earn three
+stars, one mistake earns two, anything worse earns one. The full Go rules (liberties, captures,
+suicide, simple ko) run on the device.
 
-## What is in a question
+## What is inside
 
-- **91 questions in six categories.** A round draws 20 without repeats and **prefers questions you
-  have not seen yet** (progress is kept on the device; picking uniformly at random would take close
-  to 20 rounds before you had seen them all).
-- Each question carries seven fields, and all of them are shown: category, the blanked line, four
-  candidates, an explanation, the source (sender and year — for example a 1928 letter from a Chinese
-  migrant in the Philippines to his mother), and the full original passage.
-- The answer page **scrolls** instead of cutting content, precisely so that the source and the full
-  passage survive.
-- Every question has a spoken reading in dialect, and it reads the **whole correct line**; a music
-  track loops underneath. Narration, interface sounds and music share one output: the six volume
-  steps scale all three together, and the lowest step is off.
+- **154 levels**: 119 board puzzles, 32 quiz questions and 3 endgame-teaching levels, grouped into
+  Bronze → Silver → Gold → Platinum → Diamond → Star → King. Every 19x19 position from the web
+  game was cropped into a 9x9 window by its bounding box, and every solution path was re-validated
+  under the full rules on the cropped board — 94% of the original positions fit.
+- **A pure-logic core**: the rules engine, the progression state machine, the progress store and
+  the text wrapper compile on the host, so `tools/validate.sh` plays **every level to the end**
+  and replays every solution path before anything is flashed.
+- **No audio assets**: effects are square-wave RTTTL synthesized on the fly. The web game's 2.8 MB
+  background music was deliberately dropped.
+- **A 603-codepoint font subset** in three sizes (16/24/32 px), generated from Noto Sans CJK SC
+  by `tools/weiqi/gen_font.py`.
 
-## Build and flash
+## Build
 
-```sh
-./tools/validate.sh --static      # repository checks and host tests
-./tools/validate.sh --firmware    # cold build plus merged image
+This is an [ESP-IDF](https://github.com/espressif/esp-idf) 5.5.3 project for the FoloToy AI
+Passport board (ESP32-C3, 240x320 ST7789, three-key ADC input).
+
+```bash
+idf.py build            # firmware
+idf.py flash monitor    # onto the device
+./tools/validate.sh     # repository gate: docs, generated tables, host tests, firmware
 ```
-
-The firmware gate produces `build/FoloToy-AI-Passport-full.bin`, a merged image flashed from
-offset `0x0`.
 
 ## Documentation
 
 - [`docs/README.md`](docs/README.md) — documentation index and the conventions every page follows.
-- [`docs/reference/liangdabiao/qiaopi-quiz/README.md`](docs/reference/liangdabiao/qiaopi-quiz/README.md)
-  — the full application record: the audio blob and its ADPCM encoding, the layout arithmetic and
-  vertical budgets, the deliberate differences from the web version, and the verification log.
+- [`docs/reference/liangdabiao/weiqi-quest/README.md`](docs/reference/liangdabiao/weiqi-quest/README.md)
+  — the full application record: the 9x9 cropping rule, the level pipeline, the two-dimensional
+  cursor on three keys, the deliberate differences from the web version, and the verification log.
 - [`AGENTS.md`](AGENTS.md) — repository rules for contributors and agents.
-- [`assets/README.md`](assets/README.md) — the audio, fonts and images this game ships, with sources and licences.
+- [`assets/README.md`](assets/README.md) — the fonts this game ships, with sources and licences.
 
-## Origins
+## Origins and licences
 
-- The content and audio are ported from `game-adaptations/qiaopi/build/app` in the `novel-to-game`
-  repository — a build-free single-page web game.
-- This repository is a sibling of the **Three Character Classic kids game** (`ai-passport`) and the
-  **Daodejing daily reader** (`daodejing-daily`); the three share one set of repository conventions,
-  one toolchain and one verification gate.
-
-
-thanks  https://linux.do
+- Level data derives from the LearningHub tutorial of [online-go.com](https://online-go.com),
+  extracted by the AGPL-3.0 web game the level pipeline reads; the extraction and its provenance
+  are documented in `tools/weiqi/levels.txt` and the application record. **The level content is
+  therefore distributed under AGPL-3.0**; the surrounding firmware keeps the repository's MIT
+  licence (see [`LICENSE`](LICENSE)).
+- This repository is the fourth sibling of the family: the **Three Character Classic kids game**
+  (`ai-passport`), the **Daodejing daily reader** (`daodejing-daily`), the **Qiaopi quiz**
+  (`qiaopi-quiz`) and now the **Weiqi quest** — one set of repository conventions, one toolchain,
+  one verification gate.
