@@ -53,15 +53,15 @@
 
 **经验条目：**
 
-- [为 LVGL 裁剪中文字库子集](liangdabiao/cjk-font-subsetting-for-lvgl.zh_CN.md) — 从内容源与界面文案推导字符清单而不是手写；转换前逐个码点核对母字体覆盖；位图超过 64 KB 时为何必须开「大字体」格式；以及 397 个码点的子集在 Flash 上的真实代价。
+- [为 LVGL 裁剪中文字库子集](liangdabiao/cjk-font-subsetting-for-lvgl.zh_CN.md) — 从内容源与界面文案推导字符清单而不是手写；转换前逐个码点核对母字体覆盖；位图超过 64 KB 时为何必须开「大字体」格式；以及 603 个码点的子集在 Flash 上的真实代价。
 - [让字库度量决定版式](liangdabiao/font-metrics-driven-layout.zh_CN.md) — 把「一行放得下几个字」变成一次除法、先证明字形步进等于字号再相信那次除法、在生成期与渲染期同时守住同一个上限，以及一个把字符数当字节数导致显示缺失的缺陷。
-- [把应用逻辑留在主机上](liangdabiao/host-testable-app-logic.zh_CN.md) — 纯逻辑与硬件模块的分界、把「失败时不动输出」当成可测契约、存档格式的拒绝路径测试，以及拿**真实经文**而不是它的副本去测折行规则。
+- [把应用逻辑留在主机上](liangdabiao/host-testable-app-logic.zh_CN.md) — 纯逻辑与硬件模块的分界、把「失败时不动输出」当成可测契约、存档格式的拒绝路径测试，以及拿**真实关卡库**而不是它的副本去测折行规则。
 - [在 Windows 的 Git Bash 里构建 ESP-IDF 固件](liangdabiao/windows-git-bash-esp-idf.zh_CN.md) — 设了 `MSYSTEM` 时 `idf.py` 为何静默退出且无法在 shell 内取消、虚拟环境解释器不匹配、用 `zig cc` 取得宿主编译器，以及让一个本来能跑的主机测试看起来像代码缺陷的链接器与文件系统限制。
-- [把题库整理成生成的 C 数组](liangdabiao/question-bank-pipeline.zh_CN.md) — 一题一个区块、让语法无处可写错、在生成期就卡住屏幕容量上限、让过期生成物直接失败构建的 `--check` 模式，以及让 C 表与字库清单共用同一个「真相源」模块。
+- [把关卡库整理成生成的 C 数组](liangdabiao/level-bank-pipeline.zh_CN.md) — 一关一个区块、让语法无处可写错、把一关当成「正解路径的树」而不是一条记录、把 19x19 局面裁进 9x9 窗口时用完整规则重新校验、在生成期就卡住屏幕容量上限，以及让过期生成物直接失败构建的 `--check` 模式。
 
 **应用档案：**
 
-- [侨批填字问答](liangdabiao/weiqi-quest/README.zh_CN.md) — 由真实侨批信件改编的离线填字问答：91 道题每局抽 20 道，每题四选一，作答后用方言朗读正确答案的整句，并且优先抽读者还没见过的题。
+- [围棋闯关](liangdabiao/weiqi-quest/README.zh_CN.md) — 三键设备上的离线围棋解谜闯关：7 章 154 关，把网页版 19x19 的局面按包围盒裁进 9x9 窗口，正解路径在设备上用完整规则判定。
 
 ## 新增经验条目
 

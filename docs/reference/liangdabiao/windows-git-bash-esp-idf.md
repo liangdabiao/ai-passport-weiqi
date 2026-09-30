@@ -4,217 +4,124 @@
 
 # Building ESP-IDF Firmware from Git Bash on Windows
 
-Recorded while building the [Qiaopi Quiz app](weiqi-quest/README.md)
-from a Git Bash (MSYS2) shell on Windows with ESP-IDF 5.5.3. Two things block you
-outright, one of them is not fixable from inside the shell, and one pre-existing
-part of the test suite genuinely cannot run there.
-
-This is not a recommendation to work this way. The supported setup is the
-official ESP-IDF installer with `cmd` or PowerShell, as described in
-`docs/development/engineering/environment-setup.md`. What follows is what to do
-when you are already in a POSIX shell — for instance because your tooling or your
-AI coding agent lives there — and want the firmware gate to run.
+Recorded while building the [Weiqi Quest app](weiqi-quest/README.md), on a Windows
+machine where the shell is Git Bash and there is no MSVC and no MinGW. Four things
+on this setup fail in ways that look like code problems and are not.
 
 ## Blocker 1: ESP-IDF refuses to start when `MSYSTEM` is set
 
-ESP-IDF 5.5.3 detects an MSYS shell and stops. In `tools/idf.py`:
+Git Bash exports `MSYSTEM=MINGW64`. ESP-IDF's launcher looks at it, decides it is
+running under MSYS and exits — **silently, with no output and no non-zero status**.
 
-```python
-if 'MSYSTEM' in os.environ:
-    print_warning('MSys/Mingw is no longer supported. ...')
-    # ...and main() is never called
+The trap is that unsetting it inside the same script does not help: the value was
+already exported into the environment IDF's own shell reads. The fix is to pass a
+clean environment at the point of invocation:
+
+```sh
+env -u MSYSTEM -u MSYSCON idf.py -B "$BUILD_DIR" build
 ```
 
-The warning is misleading: it is not a warning. `main()` is skipped, so `idf.py`
-prints one line and exits successfully having done nothing. Separately,
-`tools/idf_tools.py` has the same test in its `__main__` block and calls `fatal()`
-there, which exits with status 1. The practical result is that `idf.py build`
-cannot run at all.
-
-The obvious fix — unset the variable — does not work, and it is worth
-understanding why. The MSYS runtime re-injects `MSYSTEM` into every **native
-Windows** child process it launches. Unsetting it in the shell does not stop
-injection at the boundary:
-
-```console
-$ unset MSYSTEM
-$ echo "'${MSYSTEM:-<unset>}'"
-'<unset>'
-$ python.exe -c "import os; print(os.environ.get('MSYSTEM'))"
-MINGW64
-```
-
-The only two ways out are to run from `cmd`/PowerShell, where the variable is
-absent, or to patch the local ESP-IDF copy.
-
-**If you patch, patch the local toolchain, never the repository.** The
-repository's checks cannot see `D:\esp\...`, so a patched IDF is an untracked
-divergence that the next person will not know about. Leave a comment at the patch
-site saying what upstream does, why it is unusable here, and that this is a local
-modification — then write it down somewhere your team will read, because a
-toolchain patch that nobody remembers is a bug report waiting to happen. In this
-case both patches keep the upstream warning and continue into `main()`.
-
-One more path detail: `idf.py` can resolve to an `idf-exe` wrapper instead of the
-real script. Put ESP-IDF's own `tools/` directory ahead of it on `PATH` so the
-real `idf.py` wins.
+or to launch IDF from a plain `cmd.exe` wrapper. Either way, **verify the symptom
+before fixing it**: "idf.py produces no output at all" is the signature, and it
+looks nothing like a build error.
 
 ## Blocker 2: the IDF virtualenv and the interpreter on `PATH`
 
-The tools installer builds a Python virtualenv named after the interpreter it
-used — here `idf5.5_py3.12_env`, since ESP-IDF 5.5.3 uses Python 3.12. If
-`python3` on your `PATH` is a different minor version, activation looks for a
-virtualenv that does not exist:
+ESP-IDF ships its own Python virtualenv (`.espressif/python_env/...`). If another
+`python` earlier on `PATH` gets picked up instead, the failure is a confusing
+import error from inside IDF's own scripts rather than a message about Python.
 
-```text
-idf5.5_py3.13_env ... not found
-```
+Two rules that avoid the whole class:
 
-The cleanest fix is not to fight it: put a one-line forwarder at the front of
-`PATH` that `exec`s the virtualenv's own interpreter, so that `python` and
-`python3` both mean "the interpreter IDF was installed with".
-
-```sh
-#!/bin/sh
-exec "D:/esp/.espressif/python_env/idf5.5_py3.12_env/Scripts/python.exe" "$@"
-```
-
-`idf.py` will still warn that the interpreter "is not from installed venv" when
-you launch it through a wrapper. When the wrapper points at that same
-interpreter it is cosmetic; verify with `idf.py --version` before trusting it.
-
-With both blockers handled, `idf.py --version` reports 5.5.3 and the firmware
-gate runs normally. The gate's cold build is roughly 2,000 Ninja steps, so give
-it several minutes and run it in the background rather than watching it.
+- Always go through the IDF export script so the virtualenv is activated for that
+  shell, and never assume the ambient `python3` is the right one.
+- When a helper script *must* run outside IDF, give it the interpreter explicitly
+  with an absolute path. On this machine the `fontTools`-capable interpreter lives
+  in a WorkBuddy-managed environment, and the system `python3` does **not** have
+  `fontTools` — a fact worth writing down, because the failure is a bare
+  `ModuleNotFoundError` in the middle of a font build.
 
 ## Getting a host C compiler without MSVC or MinGW
 
-The static gate compiles host tests with `${CC:-cc}`. On a machine with neither
-MSVC nor MinGW that fails before it starts. `zig cc` is a workable substitute and
-travels as a Python wheel (`ziglang`), which is convenient when package
-downloads from GitHub are slow but a PyPI mirror is fast.
-
-Wrap it in a one-line script and point the gate at it:
+The host tests need a C compiler that is **not** the RISC-V cross-compiler. On a
+machine with neither MSVC nor MinGW, `zig cc` works — it ships its own libc and
+needs no SDK. The wrapper is three lines:
 
 ```sh
 #!/bin/sh
-exec "/path/to/zig.exe" cc "$@"
+# A host C compiler that is not the cross-compiler.
+exec zig cc "$@"
 ```
 
-```bash
-CC=/path/to/cc ./tools/validate.sh --static
-```
+Two details that cost time otherwise:
 
-Note that `zig cc` compiles by launching its own sub-compilers, so a sandboxed
-environment that restricts child processes may need this step to run
-unsandboxed. That is an environment permission, not a project problem.
+- Path arguments must be given as `D:/...`, not `/d/...`. Zig on Windows does not
+  resolve the MSYS-style paths.
+- `MSYS2_ARG_CONV_EXCL='*'` must be set for the invocation, or MSYS will rewrite
+  the arguments (turning `/I` into a path, for instance) before zig sees them.
 
 ## What still does not work: the demo runtime tests
 
-Four pre-existing tests — the audio, low-power, BLE, and Wi-Fi demo runtime
-tests — cannot be linked with this toolchain, and it is worth being precise about
-why rather than papering over it.
+Some of the inherited host tests build a demo's runtime behaviour and are expected
+to fail here — they need `-Wl,--gc-sections`, and the linker behind `zig cc` on PE
+does not implement it. The failure shows up as a link error naming missing symbols,
+which reads like a code problem and is an environment one.
 
-They include stub headers that **declare** LVGL and `ui_pixel` functions without
-defining them, and then call only a small part of the demo module under test. The
-remaining functions in that module reference the stubs. The tests rely on the
-linker discarding those unreferenced functions, which requires GNU
-`--gc-sections` semantics. `zig cc` always uses `lld`, and its PE/COFF mode does
-not implement that flag:
+**The way to tell the difference is to reproduce the failure on a clean baseline.**
+Check out the parent commit into a separate worktree and run the same test:
 
-```console
-$ cc ... -Wl,--gc-sections -o t          # flag accepted, silently ignored
-lld-link: error: undefined symbol: ui_pixel_screen_create
-$ cc ... -Wl,/OPT:REF -o t               # the MSVC spelling
-error: unsupported linker arg: /OPT:REF
+```sh
+git worktree add --detach /d/esp/wq-baseline <parent-commit>
+# run the same build there
+git worktree remove --force /d/esp/wq-baseline && git worktree prune
 ```
 
-Switching the target with `-target x86_64-windows-gnu` does not change the
-linker, so it does not help. There is no flag combination that fixes this.
+If the same test fails identically on the untouched baseline, it is the
+environment. Without that comparison, every inherited failure looks like something
+you introduced. Write the result down next to the test, so the next person does not
+repeat the investigation.
 
-The right response is to verify these tests where a GNU toolchain exists — Linux
-CI, which is what the repository's workflow uses — and **not** to weaken the
-stubs, add `--allow-undefined`, or skip the tests to get a green local run. The
-same applies to the three Python tests that depend on creating symlinks
-(`test_check_repo`, `test_archive_firmware`, `test_install_passport_skills`):
-without Developer Mode or administrator rights those fail on Windows for reasons
-that have nothing to do with the code.
-
-Confirm the diagnosis before believing it. The check that makes this credible is
-exporting a pristine copy of the commit and reproducing the identical failure
-there:
-
-```bash
-mkdir -p /tmp/baseline && git archive HEAD | tar -x -C /tmp/baseline
-cd /tmp/baseline
-CC=/path/to/cc ACTIONLINT_BIN=/path/to/actionlint ./tools/validate.sh --static
-```
-
-If the failures and their counts match the working tree, they are environmental.
-That single command is the difference between "I could not run the tests" and "I
-know why these tests cannot run here".
-
-Because the gate stops at the first failure, on this host `--static` ends early.
-Run the remaining checks individually so the rest of the suite still gets
-exercised:
-
-```bash
-python3 tools/check_repo.py
-actionlint -color .github/workflows/*.yml
-for t in test_deep_sleep_contract test_verify_firmware; do python3 tests/$t.py; done
-```
+Two further host tests hang rather than fail: anything that deletes a temporary
+directory. On this machine removing a directory can block indefinitely, so
+`tempfile.TemporaryDirectory`-based tests never return. They are skipped knowingly,
+and that is recorded rather than hidden.
 
 ## The embedded version string is decided at configure time
 
-An ESP-IDF app carries a version string in its descriptor, and by default that string
-is the abbreviated commit of the project directory — plus `-dirty` when the working
-tree has uncommitted changes. Two consequences, both of which cost time here:
+The firmware descriptor carries a version string that defaults to the short commit
+of the project directory, with `-dirty` appended when the tree is dirty. It is
+written in during **CMake configure**, not at link time. Three consequences:
 
-- **An incremental build does not refresh it.** The value is baked in as a compile
-  definition when CMake configures, so recompiling and relinking alone keeps the old
-  string. A tree that was dirty during the last configure keeps saying `-dirty`
-  forever, and the image then claims a commit that is not the one it was built from.
-  Fix: run `idf.py -B <build dir> reconfigure` (about three minutes: 94 s configure
-  plus 79 s generate) and then build. Doing that took the delivered image from
-  `cd86f87-dirty` to `fea720f`, the actual HEAD.
-- **Editing files while a build runs poisons the string.** A cold build here took
-  about fifty minutes, and a second session committed documentation changes during
-  it; the configure step had already seen a dirty tree, so the finished image
-  embedded a hash that never existed as a commit.
+- **An incremental build does not refresh it.** Recompiling and relinking keeps the
+  string from the last configure. Use `idf.py reconfigure` (41 seconds on this
+  machine) before measuring it.
+- **Editing files during a build pollutes it.** A cold build takes minutes; any
+  write in that window — including a commit from another session — makes the
+  configure step see a dirty tree and bake in a hash that never existed as a commit.
+- **A merged image is not byte-reproducible.** The descriptor embeds a build
+  timestamp, so two builds of the same source produce the same size and a different
+  SHA-256. "Is this the image I verified?" can only be answered by the hash recorded
+  at build time.
 
-Practical rule: for anything you intend to hand over, make sure the working tree is
-clean *before* configure, and check the resulting string rather than assuming it:
-
-```bash
-grep -o '"project_version": *"[^"]*"' <build dir>/project_description.json
-```
-
-Also worth knowing: **the SHA-256 of the merged image is not reproducible across
-builds**, because the descriptor embeds the build time. Rebuilding the same sources
-gives the same byte count but a different hash. So "is this the image I validated?"
-has to be answered with the hash you recorded at build time, not by rebuilding.
+**A derived repository needs one extra step.** This app was derived from another
+repository in the family by a full copy that included `.git`. Until the new
+repository has a commit of its own, `git describe` resolves to the **parent's**
+HEAD — so the first firmware built here carried the parent app's commit hash with a
+`-dirty` suffix. Commit first, then reconfigure. The symptom is subtle enough that
+it is worth checking the descriptor on every first build of a new derived app.
 
 ## Check list
 
-- Confirm whether `MSYSTEM` is set before blaming anything else; it changes
-  `idf.py`'s behavior from "runs" to "exits silently".
-- Prefer `cmd`/PowerShell over patching ESP-IDF. If you patch, patch only the
-  local copy and write the patch down.
-- Make `python`/`python3` resolve to the interpreter the IDF virtualenv was built
-  with.
-- Put IDF's `tools/` directory ahead of any `idf-exe` wrapper on `PATH`.
-- Use `zig cc` behind a `CC` wrapper when no other host compiler exists.
-- Accept that the stub-based demo runtime tests need a GNU linker, verify them in
-  CI, and never weaken them to get a local pass.
-- Reproduce any suspected environmental failure on a pristine export before
-  reporting it as one.
+- `MSYSTEM` is unset for the invocation, not just in the shell.
+- The IDF virtualenv is the interpreter in use; helper scripts get absolute paths.
+- Host builds use the wrapper compiler with `MSYS2_ARG_CONV_EXCL='*'`.
+- Every inherited test failure has a baseline worktree result next to it.
+- The version string in `project_description.json` is the commit you think it is.
+- The hash in `build/` matches the hash recorded when the image was verified.
 
 ## Related documents
 
-- [Qiaopi Quiz app](weiqi-quest/README.md) — the build these notes
-  come from, including its verification results.
-- [Keeping application logic on the host](host-testable-app-logic.md) — the tests
-  that do run here, and why they are portable.
-- `docs/development/engineering/environment-setup.md` — the supported setup path.
-- `docs/development/engineering/build-and-test.md` — what the gate checks and in
-  what order.
+- [Keeping application logic on the host](host-testable-app-logic.md) — what these
+  tests cover.
+- [Weiqi Quest application record](weiqi-quest/README.md) — the app this toolchain
+  produces.

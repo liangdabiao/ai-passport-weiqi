@@ -4,147 +4,107 @@
 
 # 在 Windows 的 Git Bash 里构建 ESP-IDF 固件
 
-为构建[侨批填字问答](weiqi-quest/README.zh_CN.md)时攒下的经验。当时的环境是 Windows 上的 Git Bash（MSYS2）加 ESP-IDF 5.5.3。有两道坎会直接把你挡住，其中一道**在 shell 内部无法解决**；另外还有一批既有测试在这台机器上**确实无法运行**。
-
-先说明：这不是在推荐你这么干。受支持的路线是官方 ESP-IDF 安装器配 `cmd` 或 PowerShell，见 `docs/development/engineering/environment-setup.zh_CN.md`。下面讲的是：当你已经在 POSIX shell 里了——比如你的工具链或 AI 编码助手就住在那儿——并且希望固件验证门能跑起来时，该怎么做。
+在[围棋闯关](weiqi-quest/README.zh_CN.md)里攒下的经验。这台机器用 Git Bash 当命令行，
+既没有 MSVC 也没有 MinGW。这套环境上有四件事会失败，而它们的表现**都像代码问题**，
+实际都不是。
 
 ## 第一道坎：只要设了 `MSYSTEM`，ESP-IDF 就拒绝启动
 
-ESP-IDF 5.5.3 会检测 MSYS shell 然后停下来。在 `tools/idf.py` 里：
+Git Bash 会导出 `MSYSTEM=MINGW64`。ESP-IDF 的启动器看到它，判定自己在 MSYS 下运行，
+然后退出 —— **静默退出：没有输出，也没有非零状态码。**
 
-```python
-if 'MSYSTEM' in os.environ:
-    print_warning('MSys/Mingw is no longer supported. ...')
-    # ...此后 main() 永远不会被调用
+陷阱在于：在同一个脚本里 `unset` 它没用。这个值早就被导出进环境，而 IDF 自己的
+shell 读的就是那个环境。解法是在**调用点**传一个干净的环境：
+
+```sh
+env -u MSYSTEM -u MSYSCON idf.py -B "$BUILD_DIR" build
 ```
 
-这条"警告"很有误导性：它根本不是警告。`main()` 被跳过了，于是 `idf.py` 打印一行然后成功地退出，什么都没干。另外，`tools/idf_tools.py` 的 `__main__` 里也有同样的判断，那里调的是 `fatal()`，直接以状态码 1 退出。结果就是 `idf.py build` 完全跑不起来。
-
-显而易见的那招——把这个变量 unset 掉——没有用，而原因值得搞清楚：**MSYS 运行时会给它启动的每一个原生 Windows 子进程重新注入 `MSYSTEM`。** 在 shell 里 unset 并不能阻止它在边界处注入：
-
-```console
-$ unset MSYSTEM
-$ echo "'${MSYSTEM:-<unset>}'"
-'<unset>'
-$ python.exe -c "import os; print(os.environ.get('MSYSTEM'))"
-MINGW64
-```
-
-只有两条路：改用 `cmd`/PowerShell（那里没有这个变量），或者给本地这份 ESP-IDF 打补丁。
-
-**如果要打补丁，只改本地工具链，绝不要改仓库。** 仓库的检查看不到 `D:\esp\...`，所以被改过的 IDF 是一处没人知道的偏差，下一个人不会知道。在改动处留注释说明上游怎么做的、为什么在这里不能用、以及这是本地修改——然后**写进你团队会看到的地方**，因为一个没人记得的工具链补丁，就是一份迟早要来的故障报告。本机的两处补丁都保留了上游的警告并继续进入 `main()`。
-
-还有一个路径细节：`idf.py` 可能会解析到一个 `idf-exe` 包装器而不是真正的脚本。把 ESP-IDF 自己的 `tools/` 目录放到它前面，让真正的 `idf.py` 胜出。
+或者从一个干净的 `cmd.exe` 包装里启动 IDF。无论哪种，**先确认症状再动手修**：
+"idf.py 什么输出都没有" 就是它的特征，而它看起来一点也不像构建错误。
 
 ## 第二道坎：IDF 的虚拟环境和 `PATH` 上的解释器
 
-工具安装器会按它当时用的解释器给 Python 虚拟环境命名——这里是 `idf5.5_py3.12_env`，因为 ESP-IDF 5.5.3 用的是 Python 3.12。如果你 `PATH` 上的 `python3` 是别的小版本，激活脚本就会去找一个不存在的虚拟环境：
+ESP-IDF 自带一个 Python 虚拟环境（`.espressif/python_env/...`）。如果 `PATH` 上更靠前的
+另一个 `python` 被选中了，失败会表现为 IDF 自己脚本内部一个莫名其妙的导入错误，
+而不是一句"Python 不对"。
 
-```text
-idf5.5_py3.13_env ... not found
-```
+两条规矩可以避开整类问题：
 
-最干净的做法是别跟它较劲：在 `PATH` 最前面放一个一行的转发脚本，`exec` 到虚拟环境自己的解释器，这样 `python` 和 `python3` 都表示"IDF 当初安装用的那个解释器"。
-
-```sh
-#!/bin/sh
-exec "D:/esp/.espressif/python_env/idf5.5_py3.12_env/Scripts/python.exe" "$@"
-```
-
-通过包装器启动时，`idf.py` 仍会警告解释器"not from installed venv"。只要包装器指向的就是同一个解释器，这条是纯装饰性的；用之前先跑 `idf.py --version` 确认。
-
-两道坎都处理完之后，`idf.py --version` 会报 5.5.3，固件门也能正常跑。这个门是冷编译，大约 2000 个 Ninja 步骤，所以给它几分钟，并且**放到后台跑**，不要盯着它。
+- 永远走 IDF 的 export 脚本，让那个 shell 激活虚拟环境；**永远不要假定**环境里的
+  `python3` 就是对的那个。
+- 当某个辅助脚本**必须**在 IDF 之外运行时，用绝对路径明确指定解释器。这台机器上，
+  带 `fontTools` 的解释器在一个 WorkBuddy 管理的环境里，而系统的 `python3`
+  **没有** `fontTools` —— 这条值得写下来，因为它的失败表现为字库构建中途一句
+  光秃秃的 `ModuleNotFoundError`。
 
 ## 在没有 MSVC 也没有 MinGW 的情况下弄到一个宿主编译器
 
-静态门用 `${CC:-cc}` 编译主机测试。在一台既没有 MSVC 也没有 MinGW 的机器上，它在开始之前就会失败。`zig cc` 是一个可用的替代品，而且它以 Python wheel（`ziglang`）的形式分发——当从 GitHub 下载很慢、而 PyPI 镜像很快时，这一点很省事。
-
-把它包成一行脚本，让验证门指向它：
+宿主测试需要一个**不是** RISC-V 交叉编译器的 C 编译器。在既没有 MSVC 也没有 MinGW 的
+机器上，`zig cc` 可以用 —— 它自带 libc，不需要任何 SDK。包装脚本三行：
 
 ```sh
 #!/bin/sh
-exec "/path/to/zig.exe" cc "$@"
+# 一个不是交叉编译器的宿主编译器。
+exec zig cc "$@"
 ```
 
-```bash
-CC=/path/to/cc ./tools/validate.sh --static
-```
+两个不写下来就要花时间的细节：
 
-注意 `zig cc` 是靠启动自己的子编译器来工作的，所以如果运行环境限制创建子进程，这一步可能需要在沙箱之外执行。这是环境权限问题，不是项目问题。
+- 路径参数必须写成 `D:/...`，不能是 `/d/...`。Windows 上的 zig 认不出 MSYS 风格的路径。
+- 调用时必须设 `MSYS2_ARG_CONV_EXCL='*'`，否则 MSYS 会在 zig 看到它们之前改写参数
+  （比如把 `/I` 变成一个路径）。
 
 ## 依然跑不通的部分：demo 运行时测试
 
-有四个既有测试——音频、低功耗、BLE、Wi-Fi 的 demo 运行时测试——在这套工具链下**链接不过**。这里值得把原因说准确，而不是糊过去。
+从上游继承来的一部分宿主测试会去构建某个 demo 的运行时行为，而它们在这台机器上
+**预期就是失败的** —— 它们需要 `-Wl,--gc-sections`，而 `zig cc` 背后的 PE 链接器
+不实现这个选项。失败表现为一个报缺符号的链接错误，读起来像代码问题，实际是环境问题。
 
-它们包含只**声明**、不定义 LVGL 与 `ui_pixel` 函数的桩头，然后只调用被测 demo 模块的一小部分。模块里剩下的函数会引用这些桩。这些测试依赖链接器把那些没被引用的函数丢掉，而这需要 GNU `--gc-sections` 的语义。`zig cc` 始终使用 `lld`，而它的 PE/COFF 模式并不实现这个开关：
+**分辨这两者的办法是在干净基线上复现同一个失败。** 把父提交检出到一个独立的 worktree，
+在那儿跑同一个测试：
 
-```console
-$ cc ... -Wl,--gc-sections -o t          # 开关被接受,然后被静默忽略
-lld-link: error: undefined symbol: ui_pixel_screen_create
-$ cc ... -Wl,/OPT:REF -o t               # MSVC 的写法
-error: unsupported linker arg: /OPT:REF
+```sh
+git worktree add --detach /d/esp/wq-baseline <父提交>
+# 在那儿跑同一个构建
+git worktree remove --force /d/esp/wq-baseline && git worktree prune
 ```
 
-改用 `-target x86_64-windows-gnu` 并不会改变链接器，所以也没用。**没有任何开关组合能修好它。**
+如果同一个测试在未被改动过的基线上**一模一样地失败**，那就是环境问题。没有这个对照，
+每一个继承来的失败看起来都像你自己弄坏的。把结论写在测试旁边，下一个人就不用再查一遍。
 
-正确的应对是：到一个有 GNU 工具链的地方去验这些测试——也就是仓库 workflow 使用的 Linux CI——而**不要**为了在本地跑出绿色而弱化桩、加 `--allow-undefined` 或者跳过测试。三个依赖创建符号链接的 Python 测试（`test_check_repo`、`test_archive_firmware`、`test_install_passport_skills`）同理：没有开发者模式或管理员权限时，它们在 Windows 上失败的原因与代码毫无关系。
-
-**下结论之前先确认。** 让这件事可信的关键一步，是把该提交导出一份纯净副本，在那里复现出完全相同的失败：
-
-```bash
-mkdir -p /tmp/baseline && git archive HEAD | tar -x -C /tmp/baseline
-cd /tmp/baseline
-CC=/path/to/cc ACTIONLINT_BIN=/path/to/actionlint ./tools/validate.sh --static
-```
-
-如果失败项和数量都与工作区一致，那它们就是环境问题。这一条命令，就是"我跑不了这些测试"和"我知道这些测试为什么不能在这里跑"之间的区别。
-
-因为验证门在第一个失败处就停了，所以在这台机器上 `--static` 会提前结束。把剩下的检查逐条单独跑，让其余部分仍然被覆盖到：
-
-```bash
-python3 tools/check_repo.py
-actionlint -color .github/workflows/*.yml
-for t in test_deep_sleep_contract test_verify_firmware; do python3 tests/$t.py; done
-```
+还有两个宿主测试是**挂住**而不是失败：任何会删除临时目录的测试。这台机器上删除目录
+可以无限期阻塞，所以基于 `tempfile.TemporaryDirectory` 的测试永远不返回。它们是被
+**知情地跳过**的，而且这件事被记录下来，而不是藏起来。
 
 ## 内嵌的版本号是在 configure 时定下的
 
-ESP-IDF 的应用描述符里带一个版本字符串，默认取项目目录的短提交号 —— 工作树有未提交
-改动时再缀一个 `-dirty`。由此有两个后果，这次都踩到了：
+固件描述符里带的版本号，默认是项目目录的短提交号，工作区脏时缀一个 `-dirty`。
+它是在 **CMake 配置阶段**写进去的，不是链接时。三个后果：
 
-- **增量构建不会刷新它。** 这个值是在 CMake 配置阶段作为编译定义写进去的，所以只重编、
-  只重链接会一直留着旧字符串。上一次配置时工作树是脏的，镜像就会**永远说自己是
-  `-dirty`**，而且它声称的提交可能根本不是它实际来自的那个。修法：跑一次
-  `idf.py -B <build 目录> reconfigure`（本机约三分钟：配置 94 秒 + 生成 79 秒），再
-  构建。这一步把交付镜像的内嵌版本从 `cd86f87-dirty` 变成了真正的 HEAD `fea720f`。
-- **构建跑着的时候改文件，会污染这个字符串。** 本机冷编译约五十分钟，期间另一个会话
-  提交了文档改动；配置阶段已经看到一个脏工作树，于是成品里嵌了一个**从未作为提交存在
-  过**的哈希。
+- **增量构建不会刷新它。** 只重编重链会一直留着上一次 configure 的字符串。
+  量它之前要先 `idf.py reconfigure`（这台机器上 41 秒）。
+- **构建期间改文件会污染它。** 冷编译要几分钟，这期间的任何写入 —— 包括另一个会话的
+  提交 —— 都会让配置阶段看到脏工作区，从而嵌进一个**从未作为提交存在过**的哈希。
+- **合并镜像不是字节可复现的。** 描述符里嵌了构建时间戳，所以同一份源码编两次，
+  字节数相同而 SHA-256 不同。"这是不是我验证过的那一份"只能靠构建时记下的哈希回答。
 
-实用规矩：凡是打算交付的东西，**配置之前先确认工作树是干净的**，然后去**看**结果而不要
-假设：
-
-```bash
-grep -o '"project_version": *"[^"]*"' <build 目录>/project_description.json
-```
-
-另外一件值得知道的事：**合并镜像的 SHA-256 在不同次构建之间不可复现**，因为描述符里嵌了
-构建时间。同一份源码重编，字节数完全一样但哈希不同。所以「这就是我验证过的那一份吗」
-只能靠构建时记下的哈希来回答，不能靠重新编一遍来回答。
+**派生仓库还多一步。** 这个应用是用整包复制（含 `.git`）从同族的另一个仓库派生出来的。
+在新仓库有自己的提交之前，`git describe` 解析到的是**父仓库**的 HEAD —— 所以这里编出的
+第一个固件，带着的是父应用在派生前那一次的提交号，外加一个 `-dirty` 后缀。
+**先提交，再 reconfigure。** 这个症状足够隐蔽，值得在每做一个新的派生应用时都检查一遍
+描述符。
 
 ## 检查清单
 
-- 先确认 `MSYSTEM` 是否被设置，再去怀疑别的东西；它会把 `idf.py` 的行为从"能跑"变成"静默退出"。
-- 优先用 `cmd`/PowerShell，而不是给 ESP-IDF 打补丁。真要打，只改本地副本，并把补丁写下来。
-- 让 `python`/`python3` 解析到 IDF 虚拟环境当初的那个解释器。
-- 把 IDF 的 `tools/` 目录放到任何 `idf-exe` 包装器前面。
-- 没有别的宿主编译器时，用 `CC` 包装器套一个 `zig cc`。
-- 承认那批基于桩的 demo 运行时测试需要 GNU 链接器，到 CI 里去验它们，**永远不要**为了本地通过而弱化它们。
-- 任何怀疑是环境问题的失败，都先在纯净导出上复现，再把它报成环境问题。
+- 调用时 `MSYSTEM` 是清掉的，而不只是在 shell 里 unset。
+- 用的是 IDF 虚拟环境里的解释器；辅助脚本走绝对路径。
+- 宿主构建用包装编译器，并带上 `MSYS2_ARG_CONV_EXCL='*'`。
+- 每一个继承来的测试失败，旁边都有基线 worktree 的复现结果。
+- `project_description.json` 里的版本号，就是你以为是的那次提交。
+- `build/` 里的哈希，与验证镜像时记下的哈希一致。
 
 ## 相关文档
 
-- [侨批填字问答](weiqi-quest/README.zh_CN.md) —— 这些笔记来自的那次构建，含它的验证结果。
-- [把应用逻辑留在主机上](host-testable-app-logic.zh_CN.md) —— 在这里**跑得起来**的那些测试，以及它们为什么可移植。
-- `docs/development/engineering/environment-setup.zh_CN.md` —— 受支持的环境搭建路线。
-- `docs/development/engineering/build-and-test.zh_CN.md` —— 验证门检查什么、按什么顺序。
+- [把应用逻辑留在主机上](host-testable-app-logic.zh_CN.md) —— 这些测试覆盖了什么。
+- [围棋闯关应用档案](weiqi-quest/README.zh_CN.md) —— 这套工具链产出的应用。

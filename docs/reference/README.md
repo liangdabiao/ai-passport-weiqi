@@ -60,11 +60,11 @@ The engineering rules themselves live under
 
 **Experience entries:**
 
-- [Cutting a CJK Font Subset for LVGL](liangdabiao/cjk-font-subsetting-for-lvgl.md) — deriving the glyph inventory from the content sources and the UI strings instead of hand-listing it, verifying every code point against the parent font before converting, why the large-font format flag is mandatory past 64 KB of bitmaps, and what a 397-code-point subset actually costs in flash.
+- [Cutting a CJK Font Subset for LVGL](liangdabiao/cjk-font-subsetting-for-lvgl.md) — deriving the glyph inventory from the content sources and the UI strings instead of hand-listing it, verifying every code point against the parent font before converting, why the large-font format flag is mandatory past 64 KB of bitmaps, and what a 603-code-point subset actually costs in flash.
 - [Letting Font Metrics Drive the Layout](liangdabiao/font-metrics-driven-layout.md) — turning "how many characters fit on one line" into a division, proving that the glyph advance equals the font size before trusting that division, enforcing the same budget at generation time and at render time, and a display bug caused by confusing character counts with byte counts.
 - [Keeping Application Logic on the Host](liangdabiao/host-testable-app-logic.md) — the pure-versus-hardware module split, "on failure do not modify the output" as a testable contract, testing a save format's rejection paths, and testing a line-breaking rule against the real content rather than a copy of it.
 - [Building ESP-IDF Firmware from Git Bash on Windows](liangdabiao/windows-git-bash-esp-idf.md) — why `idf.py` exits silently when `MSYSTEM` is set and cannot be unset from the shell, the virtualenv interpreter mismatch, obtaining a host compiler via `zig cc`, and the linker and file-system limits that make a working host test look like a code failure.
-- [Question Banks into Generated C](liangdabiao/question-bank-pipeline.md) — one record block per question with no syntax left to get wrong, screen-fit limits enforced at generation time, a `--check` mode that makes a stale generated table fail the build, and one module kept as the single source for both the tables and the font inventory.
+- [Level Banks into Generated C](liangdabiao/level-bank-pipeline.md) — one block per level with no syntax left to get wrong, a level treated as a tree of solution paths rather than a record, cropping 19x19 positions into a 9x9 window with full-rule re-validation, screen-fit limits enforced at generation time, and a `--check` mode that makes a stale generated table fail the build.
 
 **Application playbooks:**
 

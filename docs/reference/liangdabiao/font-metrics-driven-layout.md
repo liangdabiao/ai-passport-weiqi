@@ -4,172 +4,125 @@
 
 # Letting font metrics decide the layout
 
-Recorded while building the [Qiaopi Quiz app](weiqi-quest/README.md). Every layout
-bug in it came from the same habit: pick a round line height, write the copy, then
-discover that the font disagrees. This entry is the arithmetic that replaced the
-guessing, and the decisions it forced.
+Recorded while building the [Weiqi Quest app](weiqi-quest/README.md). Every layout
+bug in this app came from a number that was guessed instead of measured. The fix
+is to measure once, write the arithmetic down, and then let the compiler check it
+forever.
 
 ## Measure the faces before placing anything
 
-Three subsets are generated at 16, 24 and 32 px, all from the same master font.
-Their metrics, read out of the font rather than assumed:
+"How many characters fit on one line" is not a feeling, it is a division — but only
+if glyph advance equals font size. For Noto Sans CJK SC the ideographs are
+full-width, so the advance really does equal the point size, and the division is
+exact:
 
-| Size | Line height | Advance for a CJK glyph |
-| --- | --- | --- |
-| 16 px | 20 | 16.000 |
-| 24 px | 29 | 24.000 |
-| 32 px | 38 | 32.000 |
+```c
+#define WQ_CHARS_HEADLINE 6   /* 32 px: 210 / 32 */
+#define WQ_CHARS_BODY     8   /* 24 px: 210 / 24 */
+#define WQ_CHARS_SMALL   13   /* 16 px: 210 / 16 */
+```
 
-Two consequences, both load-bearing:
+(line heights are measured the same way: 16 px -> 20, 24 px -> 29, 32 px -> 38.)
 
-- **A line of Chinese text is `characters × size` pixels wide, exactly.** The
-  advance for every ideograph equals the size, so "how many characters fit in
-  210 px" is a division, not a judgement call: 6 at 32 px, 8 at 24 px, 13 at
-  16 px. This is what makes the content caps checkable at generation time instead
-  of visible only on the device.
-- **Line height is not the size.** Choosing a row of 24 px for a 24 px font leaves
-  the glyphs no room: the face needs 29. Every row in this app is 36 px tall —
-  29 plus the 3 px border on each side plus a pixel of slack, and no more, because
-  four rows at 36 px plus three 4 px gaps is 156 px, and the ask page has to fit
-  the sentence's three lines (87 px) above them inside 248 px.
+**Measure it, do not assume it.** The claim "advance equals size" is a property of
+this font, and it was verified before being trusted. A proportional face would make
+this whole file wrong.
 
-## Two forms of the same sentence, and both need a cap
+## Two forms of the same text, and both need a cap
 
-The ask page can only show the gap, so it renders the sentence with the gap
-replaced by a slot. The reveal page shows the sentence with the answer filled in.
-The two differ in length, and the slot form is the longer one — which is the
-opposite of what you assume, since the filled form is what you picture while
-reading the content.
+The same level text appears in two places with different budgets, and only one of
+them is the one you are looking at while writing the generator:
 
-Both caps are enforced, in the generator and again in a host test against the
-whole bank:
+- the **brief page** carries the instruction, inside a scroll container, and is
+  capped at **240 characters**;
+- the **quiz ask page** carries the question at **190 characters** and each option
+  at **10**.
 
-| Form | Cap | Longest shipped |
-| --- | --- | --- |
-| slot (ask page) | 22 characters | 22 |
-| filled (reveal page) | 21 characters | 19 |
+Capping only the first one means a long quiz question passes generation and then
+overflows on the device. Both are constants in `tools/weiqi/content.py`, and the
+generator refuses to emit a level that exceeds either.
 
 ## The wrap buffer is sized from the worst caller, not the average one
 
-Wrapped text goes into a single module-static buffer shared by every layer, so it
-has to fit the most expensive caller — the explanation, which is capped at 60
-characters and can reach eight lines:
+The line-breaking buffer must hold the longest input **after** wrapping, and
+wrapping adds a newline per line. Sizing it from the typical instruction is how you
+get a buffer that works for 153 levels and silently truncates the 154th.
 
-```
-60 characters x 3 bytes        = 180 bytes
-break-early newlines, worst 10 =  10 bytes
-terminator                     =   1 byte
-                                 ---------
-                                 191 bytes   ->  QPQ_WRAP_CAPACITY = 208
-```
-
-Sizing it from the sentence (22 characters, 3 lines, 66 bytes) would have looked
-plausible and overflowed the first time a long explanation was wrapped. The
-derivation sits next to the constant, in characters and bytes, so the next person
-can re-check it instead of trusting it.
+The same rule applies to the byte-vs-character trap: a UTF-8 CJK character is
+**3 bytes** but **1 character**. A buffer sized as "240 characters" is 720 bytes
+before the newlines and the terminator are counted. Getting this wrong shows up as
+text that stops mid-sentence.
 
 ## Size every `snprintf` buffer for the widest conversion, and say so
 
-GCC checks an `snprintf` buffer against the widest possible `%d` — 11 characters
-including the sign — not the two or three digits the counter will actually hold.
-For a Chinese interface this is easy to get wrong, because each ideograph already
-costs three bytes before any number appears. The rule used here:
-
-- **Size for the type's worst case and put the arithmetic in a comment**, so
-  nobody later "optimises" it back down to the observed value range.
-- **A zeroed buffer on failure is the other half of the contract**: the wrap
-  helper returns 0 and writes an empty string rather than leaving a half-written
-  line, so a too-small buffer shows as a missing line instead of corrupted text.
-
-The firmware build here does not enable `-Werror=format-truncation`, so a
-too-small buffer is a warning that scrolls past rather than a failure. The
-arithmetic is the reliable check, not the compiler.
+The rule that is easy to skip because the failure is rare and ugly: size the buffer
+for the widest value the conversion can produce, not for the widest value you
+expect. `%d` can emit 11 characters including the sign; `%u` can emit 10. Write the
+derivation in a comment next to the declaration, because "why is this 16 and not
+8" is otherwise unanswerable a year later.
 
 ## Bind the generated budgets to the layout at compile time
 
-The per-line character counts appear in three places that must agree: the content
-caps in `tools/qiaopi/content.py`, the generated macros in `main/qpq_text.h`, and
-the layout constants in `main/qpq_ui.h`. `qpq_ui.c` asserts the relationships
-rather than trusting them:
+The content limits live in generated headers; the layout constants live in
+`main/wq_layout.h`. Those are two ends of the same number, and the only way to keep
+them honest is to make the compiler compare them:
 
 ```c
-_Static_assert(QPQ_CHARS_BODY * 24 <= QPQ_BODY_W, "24px per line no longer fits");
-_Static_assert(QPQ_OPTION_MAX_CHARS <= QPQ_CHARS_BODY,
-               "an option must fit on one line");
-_Static_assert(QPQ_EXPLAIN_MAX_CHARS * 3 + 10 + 1 <= QPQ_WRAP_CAPACITY,
-               "the wrap buffer cannot hold the longest explanation");
+_Static_assert(WQ_OPTION_TEXT_MAX_CHARS <= WQ_CHARS_SMALL,
+               "option text no longer fits a 16px row");
 ```
 
-Narrowing the content area, or raising a content cap, now fails the build instead
-of pushing text off the bottom of the panel where nobody looks until the device is
-in someone's hand.
+Now changing a font size, a body width or a content cap without updating the other
+side **fails the build**. That is the whole point: the relationship is stated once,
+in a place the compiler reads.
 
 ## Measure the page budgets in one place
 
-Page geometry is fixed and written down, so the next person can check a new page
-against it instead of discovering the constraint by trial:
-
-```
-Page card 230 x 310, inset 5, radius 25
-  top bar    0 .. 36     (QPQ_BAR_H)
-  body      36 .. 284    (QPQ_BODY_H = 248)
-  hint bar 284 .. 310    (QPQ_HINT_H = 26)
-  content x 10 .. 220    (QPQ_BODY_W = 210)
-
-Ask page (body 248 px tall)
-  sentence   0 .. 87     24 px, 3 lines x 29
-  options   92 .. 248    4 rows x 36 + 3 gaps x 4 = 156
-
-Reveal page
-  everything in a vertical flex column inside the one scrollable container,
-  because explanation + full passage + provenance cannot fit 248 px and trimming
-  them would remove the reason the content was chosen
-```
-
-The ask page comes out at exactly 248 px, which is the point: the numbers were
-solved for, not fitted afterwards.
-
-## The vertical budget needs asserting too — and a scroll container needs a key
-
-The assertions above are all about **width**. The vertical budget was written down in
-a comment and nowhere else, and the first hardware test found two defects that both
-came out of that gap:
-
-1. **A scrollable container that no key could scroll.** The reveal page is taller
-   than one screen and is the only scrollable object in the app. But its key handler
-   forwarded every key to the state machine, and the state machine's reveal stage
-   recognises only OK — up and down returned "no action" and were dropped. On the
-   device the reader could see the result and the answer, and never the explanation,
-   the full passage or the provenance. Making something scrollable is not the same as
-   making it reachable; **every scrollable region needs a key that moves it**, and
-   the check is a one-liner: what does each physical key do while this region is on
-   screen?
-2. **A line placed below the body region.** The title page's statistics label sat at
-   y = 250 in a 248 px tall body. LVGL clips children to their parent by default, so
-   the line simply did not exist on the device. Nothing looked broken, because a
-   missing "seen 12/91 · best 240" line does not look like a bug — this kind of defect
-   is invisible in review and invisible on screen.
-
-Each page now asserts its own vertical budget:
+`main/wq_layout.h` deliberately does not include LVGL. The page code and the host
+tests both include it, so both are looking at the same numbers:
 
 ```c
-#define TITLE_MENU_END \
-    (TITLE_MENU_Y + (TITLE_ITEMS - 1) * (QPQ_ROW_H + QPQ_ROW_GAP) + QPQ_ROW_H)
-_Static_assert(TITLE_MENU_END <= QPQ_BODY_H, "the last menu row will be clipped");
-_Static_assert(TITLE_STATS_Y + TITLE_STATS_H <= QPQ_BODY_H, "the statistics line will be clipped");
-_Static_assert(TITLE_STATS_Y + TITLE_STATS_H <= TITLE_MENU_Y, "the statistics line overlaps the menu");
+#define WQ_BODY_TOP     WQ_BAR_H                 /* 36  */
+#define WQ_BODY_BOTTOM  (WQ_PAGE_H - WQ_HINT_H)  /* 284 */
+#define WQ_BODY_H       (WQ_BODY_BOTTOM - WQ_BODY_TOP)  /* 248 */
 ```
 
-A host test cannot cover this: the constants live in files that include `lvgl.h`. The
-compile-time assertion is the only mechanism that stays in the loop for free — and
-the fix for the statistics line was to move it **into** the space freed by a
-decorative subtitle that duplicated the top bar, so the assertion passed without
-shrinking anything.
+A copy of these numbers inside a page file is how the two drift apart. Since the
+constant header has no dependencies, there is no excuse for the copy.
+
+## The vertical budget needs asserting too — and "scrollable" is not "reachable"
+
+Two failures that screenshots and code review both miss:
+
+**Vertical arithmetic needs its own assertions.** Horizontal budgets get caught by
+the generator and the wrap tests. Vertical ones are usually only written in a
+comment — and the symptom of a wrong `y` is that **the element is simply not
+there**. The world-map page of this app laid out 7 rows at 32 px with a 4 px gap:
+`7 * 32 + 6 * 4 = 248`, which is exactly the body height, and the first version
+came to 252. A compile-time assertion caught it:
+
+```c
+_Static_assert(WQ_WORLD_ROWS * WQ_WORLD_ROW_H + (WQ_WORLD_ROWS - 1) * WQ_WORLD_GAP
+               <= WQ_BODY_H, "the last chapter row will be clipped");
+```
+
+**And a scrollable container must have a key that scrolls it.** This device has
+three buttons and no touch, so every scrollable region needs a button that moves
+it. The check is one question per screen: *while this region is on screen, what
+does each of the three physical keys do?* A page that forwards every key to the
+state machine, in a state that only consumes OK, has a scroll container nobody can
+reach — the second half of the content is invisible on the device and perfect in
+the code.
+
+The reverse constraint follows from it: **a page whose up/down keys are already
+taken by something else cannot fall back on scrolling** — its content limit has to
+be a hard cap that genuinely fits.
 
 ## Related
 
-- [Qiaopi Quiz app](weiqi-quest/README.md) — the pages these constants govern.
-- [Subsetting a CJK font for LVGL](cjk-font-subsetting-for-lvgl.md) — where the
-  sizes and line heights come from.
-- [Keeping application logic on the host](host-testable-app-logic.md) — the test
-  that asserts the real content still fits these budgets.
+- [Turning a level bank into generated C tables](level-bank-pipeline.md) — where the
+  content-side caps come from.
+- [Subsetting a CJK font for LVGL](cjk-font-subsetting-for-lvgl.md) — the three
+  sizes this arithmetic depends on.
+- [Keeping application logic on the host](host-testable-app-logic.md) — the tests
+  that assert the wrap results against the real content.

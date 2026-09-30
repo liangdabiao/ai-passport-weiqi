@@ -4,131 +4,115 @@
 
 # Subsetting a CJK font for LVGL
 
-Recorded while building the [Qiaopi Quiz app](weiqi-quest/README.md), an offline
-fill-in-the-blank game for the FoloToy AI Passport. Everything below applies to any
-application on this board that has to render Chinese; every number was measured on
-an ESP32-C3 with 8 MB of flash and no PSRAM.
+Recorded while building the [Weiqi Quest app](weiqi-quest/README.md). The device
+carries three font subsets (16 / 24 / 32 px) holding **603 code points** — 480 CJK
+ideographs plus 123 others. That is the smallest budget in this repository family,
+and it is small only because the inventory is derived rather than maintained.
 
 ## Derive the inventory from the sources, never maintain it by hand
 
-The app shows 91 questions with explanations and provenance lines, plus its own
-interface strings, and that already needs **1270 distinct code points**. Nobody is
-going to keep a list like that correct by hand, so `gen_font.py` derives it from
-three places:
+`tools/weiqi/gen_font.py` builds the list from two places:
 
-1. every character of the question bank, through the same `content.py` module the
-   C table generator uses;
-2. every non-ASCII character inside a string literal of `main/*.c|*.h`, after
-   comments are stripped — Chinese comments therefore cost no flash;
-3. printable ASCII plus the punctuation the interface draws itself.
+1. every non-ASCII character inside a **string literal** of `main/*.c|*.h`
+   (comments are stripped first, so Chinese comments cost no flash), and
+2. the character set that `tools/weiqi/content.py` says the level bank uses.
 
-The result is written to `assets/fonts/charset.txt` so a reviewer has something to
-diff and so that "why is this glyph in here" has an answer:
+A hand-maintained list drifts the first time someone edits the interface and
+forgets. Deriving it means the list cannot be stale by construction — and the
+generated `assets/fonts/charset.txt` records exactly what went in:
 
 ```
-# total code points: 1270  (CJK 1158, other 112)
-
-# --- CJK ideographs ---
-<1158 ideographs, in one unbroken run, no separators>
-
-# --- everything else (ASCII, CJK punctuation, the fullwidth low line) ---
- !"#$%&'()*+,-./0123456789:;<=>?@ABC...·—…、。《》「」！（），：；？＿
+# total code points: 603  (CJK 480, other 123)
 ```
 
-The first character of the second group is the space, which is easy to lose: a
-trim step in the generator that strips whitespace would drop `U+0020` and the
-inventory would silently become 1269 while still rendering correctly until the day
-a string needs a space.
-
-The ideographs are kept as a single unbroken run on purpose: a separator between
-them would itself be picked up by the converter as a glyph to include.
-
-The last character of the second group is a fullwidth low line, used to draw the
-blank the reader has to fill. It is in the inventory because it appears in a
-string literal of `qpq_content.c`, not because it was listed anywhere by hand.
+The space character deserves a warning of its own: it is trivially lost by any
+step that trims the inventory, and losing it makes every space in the interface
+render as nothing.
 
 ## Verify every code point before converting
 
-The master font here is Noto Sans CJK SC Regular, under the SIL Open Font License
-1.1. Before conversion, every code point is looked up in the font's `cmap` with
-`fontTools`, and a miss aborts the run with up to forty offending characters
-printed. On this project the check reported 1270/1270 present.
-
-This matters because the source text changes. A new question's explanation may
-quote a rare variant character, and handing a font a code point it does not have
-does **not** reliably stop the converter — it may happily emit a subset that is
-missing that glyph, and you find out on the device, in the middle of a line, as a
-blank box. Checking in advance converts that into a build error. It costs one pass
-over the character map, which is cheap insurance.
+Before calling the converter, the script loads the parent font with `fontTools`
+and checks every code point against its cmap. A missing glyph becomes a
+**build-time error naming the character**, not an empty box discovered on a
+device three days later. The parent font is Noto Sans CJK SC Regular (SIL Open
+Font License 1.1), and its SHA-256 is pinned in the script.
 
 ## Three sizes, uncompressed, and why the large format is required
 
-Sizes are 16 px (top bar, provenance, summary labels), 24 px (sentence, options,
-explanation, full passage) and 32 px (title page headline and result rank), all at
-4 bits per pixel and uncompressed, so they can be read straight out of the flash
-mapping without decompression.
+The subsets are generated at 16 / 24 / 32 px, 4 bits per pixel, `--no-compress`,
+`--format lvgl`. Uncompressed because the device reads the bitmaps straight out of
+mapped flash; there is no reason to decode them at runtime.
 
-In LVGL's default text format the per-glyph bitmap offset is a 16-bit field, and
-the 32 px subset's bitmap data exceeds 64 KB. `CONFIG_LV_FONT_FMT_TXT_LARGE=y` in
-`sdkconfig.defaults` is therefore mandatory, not a tuning knob.
+`CONFIG_LV_FONT_FMT_TXT_LARGE=y` is mandatory here, and the reason is a hard
+16-bit limit: the default LVGL text format stores the bitmap offset as a 16-bit
+field, which caps a font's bitmaps at 65,536 bytes. The 32 px subset alone is
+**233,660 bytes**. The flag switches that field to 32 bits.
+
+Note the shape of this decision: it depends on the *current* glyph count, so it is
+worth re-deriving rather than inheriting the previous app's answer. A smaller
+subset can flip the conclusion back.
 
 ## The size of the generated `.c` file is not the flash cost
 
-This one cost an hour of unnecessary alarm. The three generated files are 0.99 MB,
-1.97 MB and 3.23 MB of source, which looks impossible next to a 7.94 MB partition.
-It is not: each byte is written as `0xXX,`, six characters per byte of data.
+The three generated files are **2,857,006 bytes of text** but cost **431,919 bytes
+of flash**:
 
-The honest number comes from the link step: in
-`build/firmware/<image sha>/FoloToy-AI-Passport.map`, the `glyph_bitmap` sections of
-the three faces are 141,775, 313,755 and 536,595 bytes, or **about 0.95 MB for all
-three**. The source files can be arbitrarily large; what matters is what the
-compiler keeps. (Counting `glyph_dsc` and the kerning tables in the same map gives
-165 KB, 333 KB and 550 KB.)
+| Subset | `.c` source | `glyph_bitmap` in flash |
+| --- | --- | --- |
+| 16 px | 464,759 B | 61,805 B |
+| 24 px | 906,674 B | 136,454 B |
+| 32 px | 1,485,573 B | 233,660 B |
+| **total** | **2,857,006 B** | **431,919 B** |
 
-The practical rule: estimate flash by counting bytes, not by reading the generated
-text. If you must guess before building, `glyphs × size × size ÷ 2` bytes per face
-(for 4 bpp) is the right shape of estimate, and the real answer comes from the
-firmware size report.
+Six and a half times smaller, because every byte is written as `0xAB,` — six
+characters of source per byte of data. So never size a partition, or judge a font
+budget, from the `.c` files.
+
+The only trustworthy measurement is the **`glyph_bitmap` section in the link-time
+`.map` file**:
+
+```
+grep -A2 "^ \.rodata\.glyph_bitmap" build/firmware/<sha>/FoloToy-AI-Passport.map
+```
+
+Do not try to count `0xXX` occurrences in the source either: the converter writes
+values below 16 as a **single** hex digit (`0x0,`, `0xf,`), so a two-digit pattern
+undercounts by nearly half.
 
 ## A stale font is the easiest mistake to miss
 
-Changing an interface string and forgetting to re-run the font generator is not
-something a gate catches on its own — not until someone flashes the firmware, or
-worse, a community reviewer rejects it. That is exactly what happened here: a
-real-device fix added "scroll up and down" to the answer page's bottom bar, the
-font was never regenerated, the two code points `U+7FFB` and `U+9605` had no
-glyph, and the bar rendered as two boxes in the middle of a sentence.
+Two things make this failure mode nasty:
 
-The `--check` mode at the time did two things: it compared `charset.txt` against
-the current derivation, and it verified the code points exist in the master font.
-It did both, and both failed — but it **only printed a line to stderr and still
-returned 0**, so the firmware build that ran right after it went through. Afterwards
-every on-screen string was compared against the font character by character and
-those two were the only misses. In other words, "the font files look fine" is not
-a check; you need an explicit one.
+- a font that no longer matches the interface renders as a row of empty boxes,
+  which looks like a rendering bug rather than a build problem, and
+- the obvious check does not catch it: the first version of `--check` here only
+  compared the inventory file, printed `STALE` to stderr, **and still exited 0**.
+  A gate that passes on stale data is not a gate.
 
-That check is now hard-failing, on two conditions:
+So `gen_font.py --check` now does two things, and both are non-zero on failure:
 
-1. `charset.txt` differing from the current derivation exits non-zero;
-2. parsing the generated `.c` and mapping the offsets in `unicode_list_1` back to
-   code points using **that section's own `range_start`**, then diffing against the
-   inventory, exits non-zero if anything is missing.
+1. the inventory file must match what the sources derive, and
+2. the generated `.c` must actually contain every code point in that inventory.
 
-The second one is what actually catches the bug, because it asks "can the device
-draw this character", not "is the list file fresh". The trap when implementing it:
-the same file also carries an ASCII cmap with `range_start = 32`, and a regex that
-matches that one first will map every offset to the wrong code point and report the
-entire inventory as missing — chasing that result sends you in the wrong direction.
+For (2) the script parses the generated file and reconstructs the renderable set.
+Two details are worth writing down, because getting either wrong produces a
+**catastrophic-looking** result (every character reported missing):
 
-One last note: a shorter inventory is normal. Regenerating this time took the count
-from 1303 down to 1270 — nine characters added, forty-two removed because they only
-appeared in compile-time assertion messages. The three faces shrank slightly with
-it, from 1.05 MB of bitmap data to 0.95 MB.
+- The converter emits **two** cmap entries, and **both** must be counted. One is a
+  contiguous range (`.unicode_list = NULL`, `range_start = 32, range_length = 95`
+  for ASCII); the other is a sparse table (`.unicode_list = unicode_list_N`) whose
+  code points are its *own* `range_start` plus the list values. Counting only the
+  sparse one reports all of ASCII as missing; counting only the contiguous one
+  loses every CJK glyph. The reliable discriminator is whether `.unicode_list` is
+  `NULL`, not the numeric value of `range_start`.
+- If the reconstruction reports that *everything* is missing, the parser is wrong,
+  not the font. That symptom has exactly one cause.
 
 ## Related
 
-- [Qiaopi Quiz app](weiqi-quest/README.md) — the subsets these serve.
-- [Turning a prose bank into generated C tables](question-bank-pipeline.md) — the
-  module that supplies the content half of the inventory.
-- [Letting font metrics decide the layout](font-metrics-driven-layout.md) — the
-  character-per-line budgets these sizes imply.
+- [Weiqi Quest application record](weiqi-quest/README.md) — the app these subsets
+  serve.
+- [Turning a level bank into generated C tables](level-bank-pipeline.md) — the
+  other half of the inventory.
+- [Letting font metrics drive the layout](font-metrics-driven-layout.md) — what the
+  generated sizes are used for.

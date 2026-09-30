@@ -4,110 +4,107 @@
 
 # Keeping application logic on the host
 
-Written for the [Qiaopi Quiz app](weiqi-quest/README.md), a port of a web quiz to a
-three-key handheld. The firmware is roughly 1900 lines of interface and service
-code, but the part that decides anything — how a round is drawn, how it is scored,
-how text is broken into lines, how audio is decoded, how progress is stored — is
-about 890 hand-written lines plus 1333 generated ones that never touch ESP-IDF or
-LVGL. Those are compiled and run on the development machine, against 1658 lines of
-tests, with no board attached.
-
-The payoff is not philosophical. It is that a scoring bug is a two-second test run
-instead of a flash cycle, and that several real defects were found before anything
-was ever flashed.
+Recorded while building the [Weiqi Quest app](weiqi-quest/README.md). The most
+valuable structural decision in this app was not about the device at all — it was
+about which modules are allowed to know the device exists.
 
 ## Where the line is drawn
 
-Pure, and therefore testable on the host:
+Six modules in `main/` compile **without ESP-IDF and without LVGL**:
 
-| Module | Lines | Responsibility |
-| --- | --- | --- |
-| `qpq_session` | 233 | Round state machine, scoring, streak bonus, question draw |
-| `qpq_progress` | 155 | Save format, seen-question bitmap, rejection paths |
-| `qpq_wrap` | 157 | UTF-8 line breaking at a character budget |
-| `qpq_content` | 118 | Question access, sentence forms, rank thresholds |
-| `qpq_adpcm` | 120 | Streaming IMA-ADPCM decode |
-| `qpq_audio_index` | 106 | Audio blob header and index validation |
+| Module | What it owns |
+| --- | --- |
+| `wq_engine` | Go rules: liberties, captures, suicide, snapback, simple ko |
+| `wq_session` | the level state machine: brief, solving, answering, finishing |
+| `wq_progress` | the save blob: star packing, unlock chain, checksum |
+| `wq_content` | the generated level tables |
+| `wq_wrap` | CJK line breaking |
+| `wq_volume` | the volume step table and its arithmetic |
 
-Not testable on the host, and kept as thin as possible: `qpq_player` (ISR-adjacent
-audio output), `qpq_store` (NVS), `qpq_ui` and the four pages. The rule for
-deciding which side a piece of code belongs on: **if it can be expressed as a
-function of its arguments, it goes on the host.**
+Everything above that line — pages, widgets, buttons, storage, sound — includes
+ESP-IDF or LVGL and is only tested on the device.
+
+The test for "is this module on the right side of the line" is mechanical: **does
+it compile with the host compiler and nothing else?** If yes, it can have a fast
+test. If it needs a board to be interesting, it belongs above the line.
+
+What this buys: `test_wq_session` plays **all 154 levels to the end**, and
+`test_wq_engine` replays **all 134 solution paths (280 moves)**, in a test that
+finishes in well under a second. Waiting for a firmware build to find out that
+level 87 is unsolvable would cost minutes per iteration.
 
 ## Make the two implementations agree by construction, then prove it
 
-The audio blob is produced by a Python encoder and played by a C decoder. If those
-two ever disagree, the symptom is a subtle distortion that is nearly impossible to
-attribute. So the generator emits a fixture — a 64-sample signal, the bytes the
-Python encoder produced for it, and the sequence the Python decoder read back —
-and the C test decodes the same bytes and asserts equality sample by sample:
+The level data crosses two languages: `extract_levels.mjs` (JavaScript, evaluating
+the web game's TypeScript) produces `levels.txt`, and `tools/weiqi/content.py`
+(Python) re-parses and re-validates it before generating the C tables. Two
+independent implementations of the same validation rules will drift.
 
-```c
-for (uint32_t i = 0; i < QPQ_ADPCM_FIXTURE_SAMPLES; i++) {
-    assert(s_bulk[i] == qpq_adpcm_fixture_expected[i]);
-}
-```
+Two mechanisms keep them honest:
 
-This is the strongest test in the repository, because it fails on either side of
-the boundary. It has already caught one real defect: the C stream reader opened
-with its sample cursor at 1 instead of 0 and silently dropped the first sample of
-every clip.
+- **The rules are mirrored deliberately, and the file in between is the contract.**
+  `levels.txt` is the single source of truth; neither side may invent data. The
+  extractor writes it once and then refuses to overwrite it without `--force`.
+- **The hard part is re-validated where it matters.** Cropping a 19x19 position
+  into a 9x9 window can turn a solvable level unsolvable, so the extractor replays
+  every solution path under the full rules on the *cropped* board. `content.py`
+  then checks the same structural invariants again on the way to C, and
+  `test_wq_engine` replays the same paths a third time through the **device's own
+  C engine**. Three passes, each catching a different class of error.
 
-The fixture also documents what is *not* guaranteed. Its second half is a
-full-scale alternating square wave, which ADPCM cannot track at this sample rate;
-the quality assertion covers only the first 48 samples, which are a decaying sine.
-Claiming a bound over the whole fixture would have been a lie that happened to pass.
+The third pass is the one that matters most: it is the only one that runs the rules
+code the device will actually execute.
 
 ## Test the rejection paths, not just the happy one
 
-Both serialised formats are attacked deliberately, because the failures that
-matter happen on a device that lost power mid-write, not on the first run:
+A save format is where this pays off. `wq_progress` packs stars into two bits per
+level plus a Fletcher checksum, and its test asserts every way that data can be
+wrong:
 
-- **The audio blob index** has nine rejection tests: null pointer, truncated
-  header, truncated index, wrong magic, wrong version, wrong sample rate, a zero
-  sample count, an offset that skips a clip, a clip that overruns the blob, and a
-  length that disagrees with what the index implies.
-- **The save blob** has six: wrong length, wrong magic, wrong version, a flipped
-  bit in the body, a flipped bit in the seen bitmap, and a corrupted checksum.
+- a blob with the wrong magic
+- a blob whose version is from the future
+- a blob whose checksum does not match its payload
+- a blob truncated mid-record
+- a level index past the end of the bank
+- a star value outside its packed range
 
-Both suites assert not only that the failure is reported but that **the caller's
-structure is left untouched**. That is what the second test found: a failed
-`qpq_audio_index_open` returned early without clearing the index, so a caller that
-ignored the return value would keep addressing clips through the *previous*
-successful open — a bug that runs fine and reads the wrong memory.
+Each of these must produce a specific rejection, not a silently-clamped value.
+"On failure, do not modify the output" is a contract the test can check, and it is
+worth checking: a half-written progress blob that the device reads back is far
+worse than a clear failure.
+
+The same idea appears in the content parser, which aborts on a missing key, an
+unknown key, a duplicated key, a coordinate outside the window, or a solution path
+that does not start with the declared player.
 
 ## Tests should link the real data, not a copy of it
 
-The wrap test links `qpq_content` and `qpq_text` and walks the whole bank, in both
-sentence forms, asserting that no wrapped line exceeds its layer's budget:
+The wrap test does not carry a handful of sample strings. It walks **every
+instruction and every question in the generated tables** and asserts, for each
+one, that it wraps into the buffer at 13 characters per line, that no line exceeds
+the budget, and that no line begins with a closing punctuation mark.
 
-```
-ok  real sentences wrap: at most 3 lines (budget 3), at most 8 chars (budget 8)
-ok  ask-page slot form:  at most 3 lines, at most 8 chars
-```
+The difference is not thoroughness for its own sake. A copied sample proves the
+algorithm works on the cases you already thought of. The real bank proves it works
+on level 154, which someone else wrote.
 
-A test written against a copy of the content in the test file would have passed on
-the copy's behaviour and said nothing about the app. Linking the real tables is
-what makes "it fits on one screen" a checkable claim rather than a hope — and it
-found the budget mismatch between the two sentence forms.
+## Make the pipeline reproducible, so a rerun is a diff and not a surprise
 
-One wrong expectation surfaced this way too: a six-character sentence was asserted
-to wrap onto two lines, but six characters fit one line, so there is no break at
-all. The test was wrong, the code was right, and the only reason that was
-discoverable is that the test was checked against reality.
+There is no randomness in this app's build, and that is deliberate. The 154 levels
+are a deterministic selection out of 3564, the extraction is a deterministic
+evaluation of the web game's data, and every generator is a pure function of
+`levels.txt`.
 
-## Make the randomness reproducible
-
-The round state machine contains the only randomness in the application, and it
-uses a xorshift32 seeded by the caller rather than `rand()`. A fixed seed produces
-a fixed draw, so "a round of 20 contains no duplicates" is a fact the test asserts,
-not a probability it hopes for. It also makes the seen-question preference rule
-testable: mark all but three questions as seen and assert those three appear.
+That property is worth protecting, because it is what makes `--check` meaningful:
+if `gen_content.py --check` fails, the *only* possible explanation is that someone
+edited the bank without regenerating — not that a random seed moved. A pipeline
+that cannot reproduce its own output cannot tell you whether a change was intended.
 
 ## Related
 
-- [Qiaopi Quiz app](weiqi-quest/README.md) — the modules and the pages on top.
-- [Letting font metrics decide the layout](font-metrics-driven-layout.md) — the
-  budgets the content test asserts against.
+- [Letting font metrics drive the layout](font-metrics-driven-layout.md) — the
+  arithmetic these tests assert against.
+- [Turning a level bank into generated C tables](level-bank-pipeline.md) — the data
+  the pure modules consume.
 - [Building ESP-IDF firmware from Git Bash on Windows](windows-git-bash-esp-idf.md)
-  — how to get a host compiler, and why some tests behave differently from these.
+  — how the host tests are actually built and run on this machine.
